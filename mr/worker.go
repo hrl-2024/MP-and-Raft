@@ -9,6 +9,8 @@ import (
 	"math/rand"
 	"net/rpc"
 	"os"
+	"path/filepath"
+	"sort"
 )
 
 // Map functions return a slice of KeyValue.
@@ -16,6 +18,14 @@ type KeyValue struct {
 	Key   string `json:"Key"`
 	Value string `json:"Value"`
 }
+
+// for sorting by key.
+type ByKey []KeyValue
+
+// for sorting by key.
+func (a ByKey) Len() int           { return len(a) }
+func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 type WorkerStruct struct {
 	mapf                func(string, string) []KeyValue
@@ -49,13 +59,6 @@ func Worker(mapf func(string, string) []KeyValue,
 	w.RequestJob()
 }
 
-// To debug purpose, to printout the error message
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func (w *WorkerStruct) RequestJob() {
 	args := JobRequestArgs{}
 
@@ -63,66 +66,122 @@ func (w *WorkerStruct) RequestJob() {
 
 	reply := JobRequestReply{}
 
-	call("Coordinator.JobRequestRPC", &args, &reply)
+	for call("Coordinator.JobRequestRPC", &args, &reply) {
 
-	if reply.JobType == "map" {
-		// Read the file
-		file, err := os.Open(reply.File)
-		if err != nil {
-			log.Fatalf("cannot open %v", reply.File)
-		}
-		content, err := ioutil.ReadAll(file)
-		if err != nil {
-			log.Fatalf("cannot read %v", reply.File)
-		}
-		file.Close()
-
-		// Store the intermediate result
-		intermediate_result := w.mapf(reply.File, string(content))
-
-		// Create the file for the intermediate results
-		for i := 0; i < reply.NReduce; i++ {
-			filename := fmt.Sprintf("mr-%d-%d.json", w.id, i)
-			os.Create(filename)
-		}
-
-		// writing the intermediate result
-		for _, value := range intermediate_result {
-
-			buket_id := ihash(value.Key) % reply.NReduce
-			filename := fmt.Sprintf("mr-%d-%d.json", w.id, buket_id)
-			// cannot use os.Open simply because 'bad file descriptor' issue
-			file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+		if reply.JobType == "map" {
+			// Read the file
+			file, err := os.Open(reply.File)
 			if err != nil {
-				log.Fatalf("cannot open %v", filename)
+				log.Fatalf("cannot open %v", reply.File)
 			}
-			enc := json.NewEncoder(file)
-
-			err = enc.Encode(&value)
+			content, err := ioutil.ReadAll(file)
 			if err != nil {
-				log.Fatalf("JSON.ENCODER: cannot write %v\n%v", value, err)
+				log.Fatalf("cannot read %v", reply.File)
 			}
-
 			file.Close()
+
+			// Store the intermediate result
+			intermediate_result := w.mapf(reply.File, string(content))
+
+			// Create the file for the intermediate results
+			for i := 0; i < reply.NReduce; i++ {
+				filename := fmt.Sprintf("mr-%d-%d.json", w.id, i)
+				os.Create(filename)
+			}
+
+			// writing the intermediate result
+			for _, value := range intermediate_result {
+
+				buket_id := ihash(value.Key) % reply.NReduce
+				filename := fmt.Sprintf("mr-%d-%d.json", w.id, buket_id)
+				// cannot use os.Open simply because 'bad file descriptor' issue
+				file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+				if err != nil {
+					log.Fatalf("cannot open %v", filename)
+				}
+				enc := json.NewEncoder(file)
+
+				err = enc.Encode(&value)
+				if err != nil {
+					log.Fatalf("JSON.ENCODER: cannot write %v\n%v", value, err)
+				}
+
+				file.Close()
+			}
+
+			// inform the coordinator that this map has done
+			call("Coordinator.MapJobCompleteRPC", &args, &reply)
+
+		} else if reply.JobType == "reduce" {
+			// reduce
+
+			// create the output file
+			// oname := fmt.Sprintf("mr-out-%d", reply.BucketId)
+			// ofile, err_onCreate := os.Create(oname)
+			// if err_onCreate != nil {
+			// 	log.Fatalf("cannot create %v", oname)
+			// }
+
+			// grabbing all relevant intermediate results
+			filenamepattern := fmt.Sprintf("../main/mr-*-%d.json", reply.BucketId)
+			matches, _ := filepath.Glob(filenamepattern)
+
+			intermediate := []KeyValue{}
+
+			for _, filename := range matches {
+				file, err_open := os.Open(filename)
+				if err_open != nil {
+					log.Fatalf("Reduce: cannot open %v", filename)
+				}
+
+				// Read all json back and append back to intermediate
+				dec := json.NewDecoder(file)
+				for {
+					var kv KeyValue
+					if err := dec.Decode(&kv); err != nil {
+						break
+					}
+					intermediate = append(intermediate, kv)
+				}
+			}
+
+			// reduce from main.mrsequential
+			sort.Sort(ByKey(intermediate))
+
+			oname := fmt.Sprintf("mr-out-%d", reply.BucketId)
+			ofile, _ := os.Create(oname)
+
+			//
+			// call Reduce on each distinct key in intermediate[],
+			// and print the result to mr-out-0.
+			//
+			i := 0
+			for i < len(intermediate) {
+				j := i + 1
+				for j < len(intermediate) && intermediate[j].Key == intermediate[i].Key {
+					j++
+				}
+				values := []string{}
+				for k := i; k < j; k++ {
+					values = append(values, intermediate[k].Value)
+				}
+				output := w.reducef(intermediate[i].Key, values)
+
+				// this is the correct format for each line of Reduce output.
+				fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
+
+				i = j
+			}
+
+			ofile.Close()
+
+			// inform the coordinator that this reduce has done
+			call("Coordinator.ReduceJobCompleteRPC", &args, &reply)
+
+		} else if reply.JobType == "done" {
+			// exit
+			break
 		}
-
-		// inform the coordinator that this map has done
-		call("Coordinator.MapJobCompleteRPC", &args, &reply)
-
-	} else if reply.JobType == "reduce" {
-		// reduce
-
-		// create the output file
-		// oname := fmt.Sprintf("mr-out-%d", reply.BucketId)
-		// ofile, err_onCreate := os.Create(oname)
-		// if err_onCreate != nil {
-		// 	log.Fatalf("cannot create %v", oname)
-		// }
-
-		// grabbing all relevant intermediate results
-
-	} else {
-		// exit
 	}
 }
 
