@@ -11,29 +11,18 @@ import (
 	"strconv"
 )
 
-//
-// example to show how to declare the arguments
-// and reply for an RPC.
-//
-
-type ExampleArgs struct {
-	X int
+// Universal MapTask structure
+type MapTask struct {
+	Filename  string // Filename = key
+	NumReduce int    // Number of reduce tasks, used to figure out number of buckets.
 }
 
-type ExampleReply struct {
-	Y int
-}
-
-// Add your RPC definitions here.
 type JobRequestArgs struct {
-	WorkerId uint64
 }
 
 type JobRequestReply struct {
-	JobType  string
-	File     string
-	NReduce  int
-	BucketId int
+	Type int // -1 for map, -2 for Done, other indicates the reduce bucket id
+	Job  MapTask
 }
 
 // Cook up a unique-ish UNIX-domain socket name

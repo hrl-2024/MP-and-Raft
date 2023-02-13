@@ -15,23 +15,8 @@ import (
 
 // Map functions return a slice of KeyValue.
 type KeyValue struct {
-	Key   string `json:"Key"`
-	Value string `json:"Value"`
-}
-
-// for sorting by key.
-type ByKey []KeyValue
-
-// for sorting by key.
-func (a ByKey) Len() int           { return len(a) }
-func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
-
-type WorkerStruct struct {
-	mapf                func(string, string) []KeyValue
-	reducef             func(string, []string) string
-	id                  uint64
-	intermediate_result []KeyValue
+	Key   string
+	Value string
 }
 
 // use ihash(key) % NReduce to choose the reduce
@@ -42,162 +27,169 @@ func ihash(key string) int {
 	return int(h.Sum32() & 0x7fffffff)
 }
 
-// main/mrworker.go calls this function.
-func Worker(mapf func(string, string) []KeyValue,
-	reducef func(string, []string) string) {
+// for sorting by key.
+type ByKey []KeyValue
 
-	// Your worker implementation here.
-	w := WorkerStruct{}
+// for sorting by key.
+func (a ByKey) Len() int           { return len(a) }
+func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
-	w.mapf = mapf
-	w.reducef = reducef
-
-	w.id = rand.Uint64()
-
-	// uncomment to send the Example RPC to the coordinator.
-	// CallExample()
-	w.RequestJob()
+type WorkerSt struct {
+	mapf    func(string, string) []KeyValue
+	reducef func(string, []string) string
+	id      uint32
 }
 
-func (w *WorkerStruct) RequestJob() {
-	args := JobRequestArgs{}
+// main/mrworker.go calls this function.
+func Worker(mapf func(string, string) []KeyValue, reducef func(string, []string) string) {
+	w := WorkerSt{
+		mapf:    mapf,
+		reducef: reducef,
+		id:      rand.Uint32(),
+	}
 
-	args.WorkerId = w.id
+	w.RequestTask()
+}
 
-	reply := JobRequestReply{}
+// Requests map task, tries to do it, and repeats
+func (w *WorkerSt) RequestTask() {
+	for {
+		args := JobRequestArgs{}
+		reply := JobRequestReply{}
+		call("Coordinator.RequestTask", &args, &reply)
 
-	for call("Coordinator.JobRequestRPC", &args, &reply) {
-
-		if reply.JobType == "map" {
-			// Read the file
-			file, err := os.Open(reply.File)
-			if err != nil {
-				log.Fatalf("cannot open %v", reply.File)
-			}
-			content, err := ioutil.ReadAll(file)
-			if err != nil {
-				log.Fatalf("cannot read %v", reply.File)
-			}
-			file.Close()
-
-			// Store the intermediate result
-			intermediate_result := w.mapf(reply.File, string(content))
-
-			// Create the file for the intermediate results
-			for i := 0; i < reply.NReduce; i++ {
-				filename := fmt.Sprintf("mr-%d-%d.json", w.id, i)
-				os.Create(filename)
-			}
-
-			// writing the intermediate result
-			for _, value := range intermediate_result {
-
-				buket_id := ihash(value.Key) % reply.NReduce
-				filename := fmt.Sprintf("mr-%d-%d.json", w.id, buket_id)
-				// cannot use os.Open simply because 'bad file descriptor' issue
-				file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-				if err != nil {
-					log.Fatalf("cannot open %v", filename)
-				}
-				enc := json.NewEncoder(file)
-
-				err = enc.Encode(&value)
-				if err != nil {
-					log.Fatalf("JSON.ENCODER: cannot write %v\n%v", value, err)
-				}
-
-				file.Close()
-			}
-
-			// inform the coordinator that this map has done
-			call("Coordinator.MapJobCompleteRPC", &args, &reply)
-
-		} else if reply.JobType == "reduce" {
-			// reduce
-			fmt.Printf("Worker: %v received reduce job %v.\n\n", args.WorkerId, reply.BucketId)
-
-			// grabbing all relevant intermediate results
-			filenamepattern := fmt.Sprintf("../main/mr-*-%d.json", reply.BucketId)
-			matches, _ := filepath.Glob(filenamepattern)
-
-			intermediate := []KeyValue{}
-
-			for _, filename := range matches {
-				file, err_open := os.Open(filename)
-				if err_open != nil {
-					log.Fatalf("Reduce: cannot open %v", filename)
-				}
-
-				// Read all json back and append back to intermediate
-				dec := json.NewDecoder(file)
-				for {
-					var kv KeyValue
-					if err := dec.Decode(&kv); err != nil {
-						break
-					}
-					intermediate = append(intermediate, kv)
-				}
-			}
-
-			// reduce from main.mrsequential
-			sort.Sort(ByKey(intermediate))
-
-			oname := fmt.Sprintf("mr-out-%d", reply.BucketId)
-			ofile, _ := os.Create(oname)
-
-			//
-			// call Reduce on each distinct key in intermediate[],
-			// and print the result to mr-out-0.
-			//
-			i := 0
-			for i < len(intermediate) {
-				j := i + 1
-				for j < len(intermediate) && intermediate[j].Key == intermediate[i].Key {
-					j++
-				}
-				values := []string{}
-				for k := i; k < j; k++ {
-					values = append(values, intermediate[k].Value)
-				}
-				output := w.reducef(intermediate[i].Key, values)
-
-				// this is the correct format for each line of Reduce output.
-				fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
-
-				i = j
-			}
-
-			ofile.Close()
-
-			// inform the coordinator that this reduce has done
-			call("Coordinator.ReduceJobCompleteRPC", &args, &reply)
-
-		} else if reply.JobType == "done" {
-			// exit
+		if reply.Type == -2 {
 			break
+		} else if reply.Type == -1 {
+			w.DoMap(reply.Job)
+		} else {
+			w.DoReduce(reply.Type)
 		}
 	}
 }
 
-// example function to show how to make an RPC call to the coordinator.
-//
-// the RPC argument and reply types are defined in rpc.go.
-func CallExample() {
+func (w WorkerSt) DoMap(reply MapTask) {
+	file, err := os.Open(reply.Filename)
+	if err != nil {
+		log.Fatalf("cannot open %v", reply.Filename)
+	}
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatalf("cannot read %v", reply.Filename)
+	}
+	file.Close()
 
-	// declare an argument structure.
-	args := ExampleArgs{}
+	intermediate_result := w.mapf(reply.Filename, string(content))
 
-	// fill in the argument(s).
-	args.X = 99
+	// writing the intermediate result
+	for _, value := range intermediate_result {
 
-	// declare a reply structure.
-	reply := ExampleReply{}
+		buket_id := ihash(value.Key) % reply.NumReduce
+		filename := fmt.Sprintf("mr-tmp/mr-in-%d-%d.json", w.id, buket_id)
 
-	// send the RPC request, wait for the reply.
-	call("Coordinator.Example", &args, &reply)
+		// OpenFile() will create a file if not exist
+		file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatalf("Map: cannot open %v", filename)
+		}
+		enc := json.NewEncoder(file)
 
-	// reply.Y should be 100.
-	fmt.Printf("reply.Y %v\n", reply.Y)
+		err = enc.Encode(&value)
+		if err != nil {
+			log.Fatalf("JSON.ENCODER: cannot write %v\n%v", value, err)
+		}
+
+		file.Close()
+	}
+
+	fmt.Println("Map task for ", reply.Filename, " completed")
+
+	// inform the coordinator that this map has done
+	emptyReply := JobRequestReply{}
+	call("Coordinator.MapTaskCompleted", &reply, &emptyReply)
+}
+
+func (w WorkerSt) DoReduce(bucketID int) {
+	// reduce
+	fmt.Printf("received reduce job %d.\n", bucketID)
+
+	// grabbing all relevant intermediate results
+	filenamepattern := fmt.Sprintf("../main/mr-tmp/mr-in-*-%d.json", bucketID)
+	matches, _ := filepath.Glob(filenamepattern)
+
+	intermediate := []KeyValue{}
+
+	for _, filename := range matches {
+		file, err_open := os.Open(filename)
+		if err_open != nil {
+			log.Fatalf("Reduce: cannot open %v", filename)
+		}
+
+		// Read all json back and append back to intermediate
+		dec := json.NewDecoder(file)
+		for {
+			var kv KeyValue
+			if err := dec.Decode(&kv); err != nil {
+				break
+			}
+			intermediate = append(intermediate, kv)
+		}
+	}
+
+	// reduce from main.mrsequential with modification
+	sort.Sort(ByKey(intermediate))
+
+	oname := fmt.Sprintf("mr-tmp/mr-out-%d-%d.json", w.id, bucketID)
+
+	ofile, err := os.OpenFile(oname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatalf("reduce: cannot open/create the output file %v", ofile)
+	}
+
+	enc := json.NewEncoder(ofile)
+
+	//
+	// call Reduce on each distinct key in intermediate[],
+	// and print the result to mr-out-X-Y
+	//
+	i := 0
+	for i < len(intermediate) {
+		j := i + 1
+		for j < len(intermediate) && intermediate[j].Key == intermediate[i].Key {
+			j++
+		}
+		values := []string{}
+		for k := i; k < j; k++ {
+			values = append(values, intermediate[k].Value)
+		}
+		output := w.reducef(intermediate[i].Key, values)
+
+		output_kva := KeyValue{
+			Key:   intermediate[i].Key,
+			Value: output,
+		}
+
+		err = enc.Encode(&output_kva)
+		if err != nil {
+			log.Fatalf("JSON.ENCODER: cannot write %v\n%v", output_kva, err)
+		}
+
+		// this is the correct format for each line of Reduce output.
+		// fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
+
+		i = j
+	}
+
+	ofile.Close()
+
+	// inform the coordinator that this reduce has done
+	reply := JobRequestReply{
+		Type: bucketID,
+	}
+	dummyReply := JobRequestReply{}
+
+	call("Coordinator.ReduceTaskCompleted", &reply, &dummyReply)
 }
 
 // send an RPC request to the coordinator, wait for the response.

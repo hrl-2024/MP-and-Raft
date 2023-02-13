@@ -13,147 +13,116 @@ import (
 )
 
 type Coordinator struct {
-	// Your definitions here.
-	files          []string
-	nReduce        int
-	mapTaskPending int
-	reducePending  []int
-	reduceComplete int
-	workerjob      map[uint64]string
-	liveWorker     map[uint64]int // key : value = workerid : 1(for done) 0 (for unfinished)
-	Lock           sync.Mutex
+	NumReduce      int             // Number of reduce tasks
+	Files          []string        // Files for map tasks, len(Files) is number of Map tasks
+	MapTasks       chan MapTask    // Channel for uncompleted map tasks
+	CompletedTasks map[string]bool // Map to check if task is completed
+	ReduceTasks    chan int        // Channel for uncompleted reduce tasks
+	Lock           sync.Mutex      // Lock for contolling shared variables
 }
 
-// Your code here -- RPC handlers for the worker to call.
+// Starting coordinator logic
+func (c *Coordinator) Start() {
+	fmt.Println("Starting Coordinator, adding Map Tasks to channel")
 
-// an example RPC handler.
-//
-// the RPC argument and reply types are defined in rpc.go.
-func (c *Coordinator) Example(args *ExampleArgs, reply *ExampleReply) error {
-	reply.Y = args.X + 1
-	return nil
+	// Prepare initial MapTasks and add them to the queue
+	for _, file := range c.Files {
+		mapTask := MapTask{
+			Filename:  file,
+			NumReduce: c.NumReduce,
+		}
+
+		fmt.Println("MapTask", mapTask, "added to channel")
+
+		c.MapTasks <- mapTask
+		c.CompletedTasks["map_"+mapTask.Filename] = false
+	}
+
+	// Prepare reduce task
+	for i := 0; i < c.NumReduce; i++ {
+		c.ReduceTasks <- i
+		fmt.Println("ReduceTask", i, "added to channel")
+		c.CompletedTasks["reduce_"+strconv.Itoa(i)] = false
+	}
+
+	c.server()
 }
 
-func (c *Coordinator) JobRequestRPC(args *JobRequestArgs, reply *JobRequestReply) error {
-	// take care of the worker
-	// check current state
-	// asign a job
+// RPC that worker calls when idle (worker requests a map task)
+func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) error {
+	fmt.Println("Assigning Task")
 
-	if len(c.files) > 0 {
-		fmt.Println("Coordinator: Assigning map task")
+	select {
+	case mapTask := <-c.MapTasks:
+		fmt.Println("Map task found:", mapTask.Filename)
+		*reply = JobRequestReply{
+			Type: -1,
+			Job:  mapTask,
+		}
 
-		// lock the coordinator in case of race condition
-		c.Lock.Lock()
-		defer c.Lock.Unlock()
+		go c.WaitForMapWorker(mapTask)
+	default:
+		select {
+		case reduceTask := <-c.ReduceTasks:
+			fmt.Println("Reduce task found:", reduceTask)
+			*reply = JobRequestReply{
+				Type: reduceTask,
+			}
 
-		reply.JobType = "map"
-		reply.NReduce = c.nReduce
-
-		// assign the file
-		reply.File = c.files[0]
-		// remove the file from c.files
-		fmt.Printf("Coordinator: Removing files from pending tasks: len(c.files) = %d\n%v\n", len(c.files), c.files)
-		c.files = c.files[1:len(c.files)]
-		fmt.Printf("Coordinator: After removed. len(c.files) = %d\n%v\n", len(c.files), c.files)
-
-		// keep a record of the worker's job (in case of straggler)
-		c.workerjob[args.WorkerId] = reply.File
-		fmt.Printf("Coordinator: worker id %d map to job on file %v\n", args.WorkerId, c.workerjob[args.WorkerId])
-
-		go c.WaitForMapWorker(args.WorkerId, c.workerjob[args.WorkerId])
-
-	} else if len(c.files) == 0 && c.mapTaskPending == 0 && len(c.reducePending) != 0 {
-		fmt.Println("Coordinator: Assigning reduce task")
-
-		// lock the coordinator in case of race condition
-		c.Lock.Lock()
-		defer c.Lock.Unlock()
-
-		reply.JobType = "reduce"
-		reply.BucketId = c.reducePending[0]
-
-		// remove from the pending reduce task
-		c.reducePending = c.reducePending[1:len(c.reducePending)]
-		reply.NReduce = c.nReduce
-
-		// keep a record of the worker's job (in case of straggler)
-		c.workerjob[args.WorkerId] = strconv.Itoa(reply.BucketId)
-		fmt.Printf("Coordinator: worker id %d map to job on reduce %v\n", args.WorkerId, reply.BucketId)
-
-		go c.WaitForReduceWorker(args.WorkerId, reply.BucketId)
-
-	} else if len(c.reducePending) == 0 && c.reduceComplete == c.nReduce {
-		fmt.Println("Coordinator: no job left, informing done")
-		reply.JobType = "done"
+			go c.WaitForReduceWorker(reduceTask)
+		default:
+			fmt.Println("All done.")
+			*reply = JobRequestReply{
+				Type: -2,
+			}
+		}
 	}
 
 	return nil
 }
 
-func (c *Coordinator) WaitForMapWorker(workerid uint64, file string) error {
-	fmt.Printf("Coordinator is waiting for map worker %v on job %v \n", workerid, file)
+// Goroutine will wait 5 seconds and check if map task is completed or not
+func (c *Coordinator) WaitForMapWorker(task MapTask) {
+	time.Sleep(time.Second * 10)
+	c.Lock.Lock()
+	if c.CompletedTasks["map_"+task.Filename] == false {
+		fmt.Println("Timer expired, map task ", task.Filename, " is not finished. Putting back in queue.")
+		c.MapTasks <- task
+	}
+	c.Lock.Unlock()
+}
 
-	// lock the coordinator in case of race condition
+// Goroutine will wait 5 seconds and check if map task is completed or not
+func (c *Coordinator) WaitForReduceWorker(bucketID int) {
+	time.Sleep(time.Second * 10)
+	c.Lock.Lock()
+	if c.CompletedTasks["reduce_"+strconv.Itoa(bucketID)] == false {
+		fmt.Println("Timer expired, reduce task ", bucketID, " is not finished. Putting back in queue.")
+		c.ReduceTasks <- bucketID
+	}
+	c.Lock.Unlock()
+}
+
+// RPC for reporting a completion of a Map task
+func (c *Coordinator) MapTaskCompleted(args *MapTask, reply *JobRequestReply) error {
 	c.Lock.Lock()
 	defer c.Lock.Unlock()
 
-	c.liveWorker[workerid] = 0
+	c.CompletedTasks["map_"+args.Filename] = true
 
-	time.Sleep(time.Second * 5)
-
-	if c.liveWorker[workerid] == 0 && c.workerjob[workerid] == file {
-		fmt.Printf("Coordinator: %v is not finished. Putting %v back in queue.\n\n", workerid, file)
-		c.files = append(c.files, c.workerjob[workerid])
-	} else {
-		fmt.Printf("Coordinator: worker %v on job %v Done \n\n", workerid, file)
-	}
+	fmt.Println("Task", args, "completed")
 
 	return nil
 }
 
-func (c *Coordinator) WaitForReduceWorker(workerid uint64, bucketId int) error {
-	fmt.Printf("Coordinator is waiting for reduce worker %v on job %v \n", workerid, bucketId)
-
-	// lock the coordinator in case of race condition
+// RPC for reporting a completion of a Map task
+func (c *Coordinator) ReduceTaskCompleted(args *JobRequestReply, dummy *JobRequestReply) error {
 	c.Lock.Lock()
 	defer c.Lock.Unlock()
 
-	c.liveWorker[workerid] = 0
+	c.CompletedTasks["reduce_"+strconv.Itoa(args.Type)] = true
 
-	time.Sleep(time.Second * 5)
-
-	intVar, err := strconv.Atoi(c.workerjob[workerid])
-	if err != nil {
-		err_str := fmt.Sprintf("cannot convert string %v to int:", c.workerjob[workerid])
-		log.Fatal(err_str)
-	}
-
-	if c.liveWorker[workerid] == 0 && intVar == bucketId {
-		fmt.Printf("Coordinator: %v is not finished. Putting reduce %d back in queue.\n\n", workerid, bucketId)
-		c.reducePending = append(c.reducePending, bucketId)
-	} else {
-		fmt.Printf("Coordinator: worker %v on reduce job %v Done \n\n", workerid, bucketId)
-	}
-
-	return nil
-
-}
-
-// To inform the coordinator that the worker has finished its map job
-func (c *Coordinator) MapJobCompleteRPC(args *JobRequestArgs, reply *JobRequestReply) error {
-	fmt.Printf("Worker: %v finished map job on %v.\n\n", args.WorkerId, c.workerjob[args.WorkerId])
-
-	c.mapTaskPending--
-	c.liveWorker[args.WorkerId] = 1
-
-	return nil
-}
-
-// To inform the coordinator that the worker has finished its reduce job
-func (c *Coordinator) ReduceJobCompleteRPC(args *JobRequestArgs, reply *JobRequestReply) error {
-	fmt.Printf("Worker: %v finished reduce job %v.\n\n", args.WorkerId, reply.BucketId)
-
-	c.reduceComplete++
+	fmt.Println("Reduce Task", args.Type, "completed")
 
 	return nil
 }
@@ -176,34 +145,28 @@ func (c *Coordinator) server() {
 // if the entire job has finished.
 func (c *Coordinator) Done() bool {
 	// Your code here.
-	return c.reduceComplete == c.nReduce
+	if len(c.MapTasks) == 0 && len(c.ReduceTasks) == 0 {
+		return true
+	} else {
+		return false
+	}
 }
 
 // create a Coordinator.
 // main/mrcoordinator.go calls this function.
 // nReduce is the number of reduce tasks to use.
 func MakeCoordinator(files []string, nReduce int) *Coordinator {
-	c := Coordinator{}
-
-	// Your code here.
-	c.files = files
-	c.nReduce = nReduce
-	c.mapTaskPending = len(files)
-
-	// will also need to know:
-	// are we in map phrase or reduce phrase
-	// keeping track of how many are completed (remove from files)
-	// + the pending map task
-	c.reducePending = make([]int, nReduce)
-	for i := 0; i < nReduce; i++ {
-		c.reducePending[i] = i
+	c := Coordinator{
+		NumReduce:      nReduce,
+		Files:          files,
+		MapTasks:       make(chan MapTask, 100),
+		ReduceTasks:    make(chan int, nReduce),
+		CompletedTasks: make(map[string]bool),
 	}
 
-	c.reduceComplete = 0
+	fmt.Println("Starting coordinator")
 
-	c.workerjob = make(map[uint64]string)
-	c.liveWorker = make(map[uint64]int)
+	c.Start()
 
-	c.server()
 	return &c
 }
