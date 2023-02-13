@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/rpc"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -57,7 +58,9 @@ func (c *Coordinator) JobRequestRPC(args *JobRequestArgs, reply *JobRequestReply
 
 		// keep a record of the worker's job (in case of straggler)
 		c.workerjob[args.WorkerId] = reply.File
-		fmt.Printf("Coordinator: worker id %d map to job on file %v", args.WorkerId, c.workerjob[args.WorkerId])
+		fmt.Printf("Coordinator: worker id %d map to job on file %v\n", args.WorkerId, c.workerjob[args.WorkerId])
+
+		go c.WaitForMapWorker(args.WorkerId, c.workerjob[args.WorkerId])
 
 	} else if len(c.files) == 0 && c.mapTaskPending == 0 && len(c.reducePending) != 0 {
 		fmt.Println("Coordinator: Assigning reduce task")
@@ -72,38 +75,73 @@ func (c *Coordinator) JobRequestRPC(args *JobRequestArgs, reply *JobRequestReply
 		// remove from the pending reduce task
 		c.reducePending = c.reducePending[1:len(c.reducePending)]
 		reply.NReduce = c.nReduce
+
+		// keep a record of the worker's job (in case of straggler)
+		c.workerjob[args.WorkerId] = strconv.Itoa(reply.BucketId)
+		fmt.Printf("Coordinator: worker id %d map to job on reduce %v\n", args.WorkerId, reply.BucketId)
+
+		go c.WaitForReduceWorker(args.WorkerId, reply.BucketId)
+
 	} else if len(c.reducePending) == 0 && c.reduceComplete == c.nReduce {
+		fmt.Println("Coordinator: no job left, informing done")
 		reply.JobType = "done"
 	}
-
-	go c.WaitForWorker(args.WorkerId, c.workerjob[args.WorkerId])
 
 	return nil
 }
 
-func (c *Coordinator) WaitForWorker(workerid uint64, file string) error {
-	fmt.Printf("Coordinator is waiting for worker %v on job %v \n", workerid, file)
+func (c *Coordinator) WaitForMapWorker(workerid uint64, file string) error {
+	fmt.Printf("Coordinator is waiting for map worker %v on job %v \n", workerid, file)
 
-	c.liveWorker[workerid] = 0
-
-	time.Sleep(time.Second * 10)
-
+	// lock the coordinator in case of race condition
 	c.Lock.Lock()
 	defer c.Lock.Unlock()
 
+	c.liveWorker[workerid] = 0
+
+	time.Sleep(time.Second * 5)
+
 	if c.liveWorker[workerid] == 0 && c.workerjob[workerid] == file {
-		fmt.Printf("Coordinator: %v is not finished. Putting back in queue.\n", workerid)
+		fmt.Printf("Coordinator: %v is not finished. Putting %v back in queue.\n\n", workerid, file)
 		c.files = append(c.files, c.workerjob[workerid])
+	} else {
+		fmt.Printf("Coordinator: worker %v on job %v Done \n\n", workerid, file)
 	}
 
-	fmt.Printf("Coordinator: worker %v on job %v Done \n", workerid, file)
+	return nil
+}
+
+func (c *Coordinator) WaitForReduceWorker(workerid uint64, bucketId int) error {
+	fmt.Printf("Coordinator is waiting for reduce worker %v on job %v \n", workerid, bucketId)
+
+	// lock the coordinator in case of race condition
+	c.Lock.Lock()
+	defer c.Lock.Unlock()
+
+	c.liveWorker[workerid] = 0
+
+	time.Sleep(time.Second * 5)
+
+	intVar, err := strconv.Atoi(c.workerjob[workerid])
+	if err != nil {
+		err_str := fmt.Sprintf("cannot convert string %v to int:", c.workerjob[workerid])
+		log.Fatal(err_str)
+	}
+
+	if c.liveWorker[workerid] == 0 && intVar == bucketId {
+		fmt.Printf("Coordinator: %v is not finished. Putting reduce %d back in queue.\n\n", workerid, bucketId)
+		c.reducePending = append(c.reducePending, bucketId)
+	} else {
+		fmt.Printf("Coordinator: worker %v on reduce job %v Done \n\n", workerid, bucketId)
+	}
 
 	return nil
+
 }
 
 // To inform the coordinator that the worker has finished its map job
 func (c *Coordinator) MapJobCompleteRPC(args *JobRequestArgs, reply *JobRequestReply) error {
-	fmt.Printf("Worker: %v finished job on %v.\n", args.WorkerId, c.workerjob[args.WorkerId])
+	fmt.Printf("Worker: %v finished map job on %v.\n\n", args.WorkerId, c.workerjob[args.WorkerId])
 
 	c.mapTaskPending--
 	c.liveWorker[args.WorkerId] = 1
@@ -113,6 +151,8 @@ func (c *Coordinator) MapJobCompleteRPC(args *JobRequestArgs, reply *JobRequestR
 
 // To inform the coordinator that the worker has finished its reduce job
 func (c *Coordinator) ReduceJobCompleteRPC(args *JobRequestArgs, reply *JobRequestReply) error {
+	fmt.Printf("Worker: %v finished reduce job %v.\n\n", args.WorkerId, reply.BucketId)
+
 	c.reduceComplete++
 
 	return nil

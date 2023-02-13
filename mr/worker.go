@@ -114,13 +114,7 @@ func (w *WorkerStruct) RequestJob() {
 
 		} else if reply.JobType == "reduce" {
 			// reduce
-
-			// create the output file
-			// oname := fmt.Sprintf("mr-out-%d", reply.BucketId)
-			// ofile, err_onCreate := os.Create(oname)
-			// if err_onCreate != nil {
-			// 	log.Fatalf("cannot create %v", oname)
-			// }
+			fmt.Printf("Worker: %v received reduce job %v.\n\n", args.WorkerId, reply.BucketId)
 
 			// grabbing all relevant intermediate results
 			filenamepattern := fmt.Sprintf("../main/mr-*-%d.json", reply.BucketId)
