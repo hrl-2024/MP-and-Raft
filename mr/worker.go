@@ -2,6 +2,7 @@ package mr
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"hash/fnv"
 	"io/ioutil"
@@ -73,26 +74,32 @@ func (w *WorkerSt) RequestTask() {
 		if reply.Type == -2 {
 			break
 		} else if reply.Type == -1 {
-			w.DoMap(reply.Job)
+			if err := w.DoMap(reply.Job); err != nil {
+				continue
+			}
 		} else {
-			w.DoReduce(reply.Type)
+			if err := w.DoReduce(reply.Type); err != nil {
+				continue
+			}
 		}
 
-		// // Rest for a second
-		// time.Sleep(time.Second)
+		// Rest for a second
+		time.Sleep(time.Second)
 	}
 }
 
-func (w WorkerSt) DoMap(reply MapTask) {
+func (w WorkerSt) DoMap(reply MapTask) error {
 	fmt.Printf("%v received map job %v.\n", w.id, reply.Filename)
 
 	file, err := os.Open(reply.Filename)
 	if err != nil {
-		log.Fatalf("cannot open %v", reply.Filename)
+		err_str := fmt.Sprintf("cannot open %v: %v\n", reply.Filename, err)
+		return errors.New(err_str)
 	}
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Fatalf("cannot read %v", reply.Filename)
+		err_str := fmt.Sprintf("cannot read %v", reply.Filename)
+		return errors.New(err_str)
 	}
 	file.Close()
 
@@ -102,18 +109,20 @@ func (w WorkerSt) DoMap(reply MapTask) {
 	for _, value := range intermediate_result {
 
 		buket_id := ihash(value.Key) % reply.NumReduce
-		filename := fmt.Sprintf("mr-in-%d-%d.json", w.id, buket_id)
+		filename := fmt.Sprintf("mr-worker-in-%d-%d.json", w.id, buket_id)
 
 		// OpenFile() will create a file if not exist
 		file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			log.Fatalf("Map: cannot open %v", filename)
+			err_str := fmt.Sprintf("Map: cannot open %v", filename)
+			return errors.New(err_str)
 		}
 		enc := json.NewEncoder(file)
 
 		err = enc.Encode(&value)
 		if err != nil {
-			log.Fatalf("JSON.ENCODER: cannot write %v\n%v", value, err)
+			err_str := fmt.Sprintf("JSON.ENCODER: cannot write %v. %v", value, err)
+			return errors.New(err_str)
 		}
 
 		file.Close()
@@ -124,14 +133,16 @@ func (w WorkerSt) DoMap(reply MapTask) {
 	// inform the coordinator that this map has done
 	emptyReply := JobRequestReply{}
 	call("Coordinator.MapTaskCompleted", &reply, &emptyReply)
+
+	return nil
 }
 
-func (w WorkerSt) DoReduce(bucketID int) {
+func (w WorkerSt) DoReduce(bucketID int) error {
 	// reduce
 	fmt.Printf("%v received reduce job %d.\n", w.id, bucketID)
 
 	// grabbing all relevant intermediate results
-	filenamepattern := fmt.Sprintf("mr-in-*-%d.json", bucketID)
+	filenamepattern := fmt.Sprintf("mr-worker-in-*-%d.json", bucketID)
 	matches, _ := filepath.Glob(filenamepattern)
 
 	intermediate := []KeyValue{}
@@ -139,7 +150,8 @@ func (w WorkerSt) DoReduce(bucketID int) {
 	for _, filename := range matches {
 		file, err_open := os.Open(filename)
 		if err_open != nil {
-			log.Fatalf("Reduce: cannot open %v", filename)
+			err_str := fmt.Sprintf("Reduce: cannot open %v", filename)
+			return errors.New(err_str)
 		}
 
 		// Read all json back and append back to intermediate
@@ -163,12 +175,11 @@ func (w WorkerSt) DoReduce(bucketID int) {
 
 	ofile, err := os.OpenFile(oname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatalf("reduce: cannot open/create the output file %v", ofile)
+		err_str := fmt.Sprintf("reduce: cannot open/create the output file %v", ofile)
+		return errors.New(err_str)
 	}
 
 	fmt.Printf("%v created output file %v.\n", w.id, oname)
-
-	// enc := json.NewEncoder(ofile)
 
 	//
 	// call Reduce on each distinct key in intermediate[],
@@ -188,21 +199,11 @@ func (w WorkerSt) DoReduce(bucketID int) {
 			values = append(values, intermediate[k].Value)
 		}
 
-		fmt.Printf("%v doing reduce on key %v.\n", w.id, intermediate[i].Key)
+		// fmt.Printf("%v doing reduce on key %v.\n", w.id, intermediate[i].Key)
 
 		output := w.reducef(intermediate[i].Key, values)
 
-		fmt.Printf("%v done reducing on key %v.\n", w.id, intermediate[i].Key)
-
-		// output_kva := KeyValue{
-		// 	Key:   intermediate[i].Key,
-		// 	Value: output,
-		// }
-
-		// err = enc.Encode(&output_kva)
-		// if err != nil {
-		// 	log.Fatalf("JSON.ENCODER: cannot write %v\n%v", output_kva, err)
-		// }
+		// fmt.Printf("%v done reducing on key %v.\n", w.id, intermediate[i].Key)
 
 		// this is the correct format for each line of Reduce output.
 		fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
@@ -221,6 +222,8 @@ func (w WorkerSt) DoReduce(bucketID int) {
 	dummyReply := JobRequestReply{}
 
 	call("Coordinator.ReduceTaskCompleted", &reply, &dummyReply)
+
+	return nil
 }
 
 // send an RPC request to the coordinator, wait for the response.
@@ -231,7 +234,7 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 	sockname := coordinatorSock()
 	c, err := rpc.DialHTTP("unix", sockname)
 	if err != nil {
-		log.Fatal("call(): dialing:", err)
+		log.Fatal("call():", rpcname, "dialing:", err)
 	}
 	defer c.Close()
 
@@ -240,6 +243,6 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 		return true
 	}
 
-	fmt.Println("call():", err)
+	fmt.Println("call():", rpcname, err)
 	return false
 }
