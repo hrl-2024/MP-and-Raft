@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"time"
 )
 
 // Map functions return a slice of KeyValue.
@@ -43,6 +44,10 @@ type WorkerSt struct {
 
 // main/mrworker.go calls this function.
 func Worker(mapf func(string, string) []KeyValue, reducef func(string, []string) string) {
+	// set a seed for rand so it generates a different number everytime
+	// otherwise, same number all the time (number generated based on device)
+	rand.Seed(time.Now().UnixNano())
+
 	w := WorkerSt{
 		mapf:    mapf,
 		reducef: reducef,
@@ -57,7 +62,13 @@ func (w *WorkerSt) RequestTask() {
 	for {
 		args := JobRequestArgs{}
 		reply := JobRequestReply{}
-		call("Coordinator.RequestTask", &args, &reply)
+		reply_received := call("Coordinator.RequestTask", &args, &reply)
+
+		if !reply_received {
+			fmt.Println("Worker: received call() unexpcted EOF. No task in coordinator. Exiting")
+			time.Sleep(time.Second) // sleep for a second for the test
+			break
+		}
 
 		if reply.Type == -2 {
 			break
@@ -66,10 +77,15 @@ func (w *WorkerSt) RequestTask() {
 		} else {
 			w.DoReduce(reply.Type)
 		}
+
+		// // Rest for a second
+		// time.Sleep(time.Second)
 	}
 }
 
 func (w WorkerSt) DoMap(reply MapTask) {
+	fmt.Printf("%v received map job %v.\n", w.id, reply.Filename)
+
 	file, err := os.Open(reply.Filename)
 	if err != nil {
 		log.Fatalf("cannot open %v", reply.Filename)
@@ -86,7 +102,7 @@ func (w WorkerSt) DoMap(reply MapTask) {
 	for _, value := range intermediate_result {
 
 		buket_id := ihash(value.Key) % reply.NumReduce
-		filename := fmt.Sprintf("mr-tmp/mr-in-%d-%d.json", w.id, buket_id)
+		filename := fmt.Sprintf("mr-in-%d-%d.json", w.id, buket_id)
 
 		// OpenFile() will create a file if not exist
 		file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -112,10 +128,10 @@ func (w WorkerSt) DoMap(reply MapTask) {
 
 func (w WorkerSt) DoReduce(bucketID int) {
 	// reduce
-	fmt.Printf("received reduce job %d.\n", bucketID)
+	fmt.Printf("%v received reduce job %d.\n", w.id, bucketID)
 
 	// grabbing all relevant intermediate results
-	filenamepattern := fmt.Sprintf("../main/mr-tmp/mr-in-*-%d.json", bucketID)
+	filenamepattern := fmt.Sprintf("mr-in-*-%d.json", bucketID)
 	matches, _ := filepath.Glob(filenamepattern)
 
 	intermediate := []KeyValue{}
@@ -135,24 +151,32 @@ func (w WorkerSt) DoReduce(bucketID int) {
 			}
 			intermediate = append(intermediate, kv)
 		}
+		file.Close()
 	}
 
 	// reduce from main.mrsequential with modification
 	sort.Sort(ByKey(intermediate))
 
-	oname := fmt.Sprintf("mr-tmp/mr-out-%d-%d.json", w.id, bucketID)
+	fmt.Printf("%v sorted all intermediate from %v.\n", w.id, filenamepattern)
+
+	oname := fmt.Sprintf("mr-out-%d", bucketID)
 
 	ofile, err := os.OpenFile(oname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("reduce: cannot open/create the output file %v", ofile)
 	}
 
-	enc := json.NewEncoder(ofile)
+	fmt.Printf("%v created output file %v.\n", w.id, oname)
+
+	// enc := json.NewEncoder(ofile)
 
 	//
 	// call Reduce on each distinct key in intermediate[],
 	// and print the result to mr-out-X-Y
 	//
+
+	fmt.Printf("%v started reduce for %v.\n", w.id, oname)
+
 	i := 0
 	for i < len(intermediate) {
 		j := i + 1
@@ -163,23 +187,30 @@ func (w WorkerSt) DoReduce(bucketID int) {
 		for k := i; k < j; k++ {
 			values = append(values, intermediate[k].Value)
 		}
+
+		fmt.Printf("%v doing reduce on key %v.\n", w.id, intermediate[i].Key)
+
 		output := w.reducef(intermediate[i].Key, values)
 
-		output_kva := KeyValue{
-			Key:   intermediate[i].Key,
-			Value: output,
-		}
+		fmt.Printf("%v done reducing on key %v.\n", w.id, intermediate[i].Key)
 
-		err = enc.Encode(&output_kva)
-		if err != nil {
-			log.Fatalf("JSON.ENCODER: cannot write %v\n%v", output_kva, err)
-		}
+		// output_kva := KeyValue{
+		// 	Key:   intermediate[i].Key,
+		// 	Value: output,
+		// }
+
+		// err = enc.Encode(&output_kva)
+		// if err != nil {
+		// 	log.Fatalf("JSON.ENCODER: cannot write %v\n%v", output_kva, err)
+		// }
 
 		// this is the correct format for each line of Reduce output.
-		// fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
+		fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
 
 		i = j
 	}
+
+	fmt.Printf("%v done reduce for %v.\n", w.id, oname)
 
 	ofile.Close()
 
@@ -200,7 +231,7 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 	sockname := coordinatorSock()
 	c, err := rpc.DialHTTP("unix", sockname)
 	if err != nil {
-		log.Fatal("dialing:", err)
+		log.Fatal("call(): dialing:", err)
 	}
 	defer c.Close()
 
@@ -209,6 +240,6 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 		return true
 	}
 
-	fmt.Println(err)
+	fmt.Println("call():", err)
 	return false
 }

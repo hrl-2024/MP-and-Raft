@@ -1,12 +1,14 @@
 package mr
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"net/rpc"
 	"os"
+	"path/filepath"
 	"strconv"
 	"sync"
 	"time"
@@ -54,7 +56,10 @@ func (c *Coordinator) Start() {
 func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) error {
 	fmt.Println("Assigning Task")
 
-	if len(c.MapTasks) != 0 && c.NPendingMap != 0 {
+	c.Lock.Lock()
+
+	if len(c.MapTasks) != 0 || c.NPendingMap != 0 {
+		c.Lock.Unlock()
 		mapTask := <-c.MapTasks
 		fmt.Println("Map task found:", mapTask.Filename)
 		*reply = JobRequestReply{
@@ -63,7 +68,8 @@ func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) 
 		}
 
 		go c.WaitForMapWorker(mapTask)
-	} else if len(c.ReduceTasks) != 0 && c.NPendingReduce != 0 {
+	} else if len(c.ReduceTasks) != 0 || c.NPendingReduce != 0 {
+		c.Lock.Unlock()
 		reduceTask := <-c.ReduceTasks
 		fmt.Println("Reduce task found:", reduceTask)
 		*reply = JobRequestReply{
@@ -72,6 +78,7 @@ func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) 
 
 		go c.WaitForReduceWorker(reduceTask)
 	} else {
+		c.Lock.Unlock()
 		fmt.Println("All done.")
 		*reply = JobRequestReply{
 			Type: -2,
@@ -146,11 +153,58 @@ func (c *Coordinator) server() {
 // main/mrcoordinator.go calls Done() periodically to find out
 // if the entire job has finished.
 func (c *Coordinator) Done() bool {
+	c.Lock.Lock()
+	defer c.Lock.Unlock()
+
 	// Your code here.
-	if len(c.MapTasks) == 0 && len(c.ReduceTasks) == 0 {
+	if c.NPendingMap == 0 && c.NPendingReduce == 0 {
+		// create the final file
+		// c.PrepareFinalFile()
+
+		// fmt.Println("Done Writing final outout file")
 		return true
 	} else {
 		return false
+	}
+}
+
+func (c *Coordinator) PrepareFinalFile() {
+	fmt.Println("Writing final outout file")
+	// grabbing all relevant out results
+	for i := 0; i < c.NumReduce; i++ {
+		filenamepattern := fmt.Sprintf("../main/mr-tmp/mr-out-*-%d.json", i)
+		matches, _ := filepath.Glob(filenamepattern)
+
+		intermediate := []KeyValue{}
+
+		for _, filename := range matches {
+			file, err_open := os.Open(filename)
+			if err_open != nil {
+				log.Fatalf("Final Write: cannot open %v", filename)
+			}
+
+			// Read all json back and append back to intermediate
+			dec := json.NewDecoder(file)
+			for {
+				var kv KeyValue
+				if err := dec.Decode(&kv); err != nil {
+					break
+				}
+				intermediate = append(intermediate, kv)
+			}
+		}
+
+		oname := fmt.Sprintf("mr-out-%d", i)
+
+		ofile, err := os.OpenFile(oname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatalf("reduce: cannot open/create the output file %v", ofile)
+		}
+
+		for j := 0; j < len(intermediate); j++ {
+			// this is the correct format for each line of Reduce output.
+			fmt.Fprintf(ofile, "%v %v\n", intermediate[j].Key, intermediate[j].Value)
+		}
 	}
 }
 
@@ -169,6 +223,9 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	}
 
 	fmt.Println("Starting coordinator")
+
+	// make sure mr-tmp directory exists
+	// _ = os.Mkdir("mr-tmp", os.ModePerm)
 
 	c.Start()
 
