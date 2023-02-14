@@ -14,7 +14,7 @@ Please do not publish your code or make it available to current or future CS 350
 
 ## Software
 
-You'll implement this lab (and all the labs) in Go. The Go web site contains lots of tutorial information. We will grade your labs using Go version 1.13; you should use 1.13 too. You can check your Go version by running `go version`. Please follow lab 1 slides for Go setup (posted on Piazza).
+You'll implement this lab (and all the labs) in Go. The Go web site contains lots of tutorial information. We will grade your labs using Go version 1.13; you should use Go version 1.13 or higher. You can check your Go version by running `go version`. Please follow lab 1 slides for Go setup (posted on Piazza).
 
 We recommend that you work on the labs on your own machine, so you can use the tools, text editors, etc. that you are already familiar with. Alternatively, you can work on the csa machines.
 
@@ -186,3 +186,4 @@ $ git push
 **Important: check GitLab to make sure the code was submitted properly!**
 
 **Good luck!**
+
