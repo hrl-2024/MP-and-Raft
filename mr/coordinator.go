@@ -16,6 +16,8 @@ type Coordinator struct {
 	NumReduce      int             // Number of reduce tasks
 	Files          []string        // Files for map tasks, len(Files) is number of Map tasks
 	MapTasks       chan MapTask    // Channel for uncompleted map tasks
+	NPendingMap    int             // indicates how many map are yet to be complete
+	NPendingReduce int             // indicates how many reduce are yet to be complete
 	CompletedTasks map[string]bool // Map to check if task is completed
 	ReduceTasks    chan int        // Channel for uncompleted reduce tasks
 	Lock           sync.Mutex      // Lock for contolling shared variables
@@ -52,8 +54,8 @@ func (c *Coordinator) Start() {
 func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) error {
 	fmt.Println("Assigning Task")
 
-	select {
-	case mapTask := <-c.MapTasks:
+	if len(c.MapTasks) != 0 && c.NPendingMap != 0 {
+		mapTask := <-c.MapTasks
 		fmt.Println("Map task found:", mapTask.Filename)
 		*reply = JobRequestReply{
 			Type: -1,
@@ -61,20 +63,18 @@ func (c *Coordinator) RequestTask(args *JobRequestArgs, reply *JobRequestReply) 
 		}
 
 		go c.WaitForMapWorker(mapTask)
-	default:
-		select {
-		case reduceTask := <-c.ReduceTasks:
-			fmt.Println("Reduce task found:", reduceTask)
-			*reply = JobRequestReply{
-				Type: reduceTask,
-			}
+	} else if len(c.ReduceTasks) != 0 && c.NPendingReduce != 0 {
+		reduceTask := <-c.ReduceTasks
+		fmt.Println("Reduce task found:", reduceTask)
+		*reply = JobRequestReply{
+			Type: reduceTask,
+		}
 
-			go c.WaitForReduceWorker(reduceTask)
-		default:
-			fmt.Println("All done.")
-			*reply = JobRequestReply{
-				Type: -2,
-			}
+		go c.WaitForReduceWorker(reduceTask)
+	} else {
+		fmt.Println("All done.")
+		*reply = JobRequestReply{
+			Type: -2,
 		}
 	}
 
@@ -109,6 +109,7 @@ func (c *Coordinator) MapTaskCompleted(args *MapTask, reply *JobRequestReply) er
 	defer c.Lock.Unlock()
 
 	c.CompletedTasks["map_"+args.Filename] = true
+	c.NPendingMap--
 
 	fmt.Println("Task", args, "completed")
 
@@ -121,6 +122,7 @@ func (c *Coordinator) ReduceTaskCompleted(args *JobRequestReply, dummy *JobReque
 	defer c.Lock.Unlock()
 
 	c.CompletedTasks["reduce_"+strconv.Itoa(args.Type)] = true
+	c.NPendingReduce--
 
 	fmt.Println("Reduce Task", args.Type, "completed")
 
@@ -162,6 +164,8 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 		MapTasks:       make(chan MapTask, 100),
 		ReduceTasks:    make(chan int, nReduce),
 		CompletedTasks: make(map[string]bool),
+		NPendingMap:    len(files),
+		NPendingReduce: nReduce,
 	}
 
 	fmt.Println("Starting coordinator")
