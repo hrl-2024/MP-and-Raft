@@ -66,7 +66,7 @@ func (w *WorkerSt) RequestTask() {
 		reply_received := call("Coordinator.RequestTask", &args, &reply)
 
 		if !reply_received {
-			fmt.Println("Worker: received call() unexpcted EOF. No task in coordinator. Exiting")
+			fmt.Println("Worker: Coordinator has finished assigning task and died. No more work. Exiting")
 			time.Sleep(time.Second) // sleep for a second for the test
 			break
 		}
