@@ -16,7 +16,6 @@ import (
 
 type Coordinator struct {
 	NumReduce      int             // Number of reduce tasks
-	Files          []string        // Files for map tasks, len(Files) is number of Map tasks
 	MapTasks       chan MapTask    // Channel for uncompleted map tasks
 	NPendingMap    int             // indicates how many map are yet to be complete
 	NPendingReduce int             // indicates how many reduce are yet to be complete
@@ -26,11 +25,11 @@ type Coordinator struct {
 }
 
 // Starting coordinator logic
-func (c *Coordinator) Start() {
+func (c *Coordinator) Start(files []string) {
 	fmt.Println("Starting Coordinator, adding Map Tasks to channel")
 
 	// Prepare initial MapTasks and add them to the queue
-	for _, file := range c.Files {
+	for _, file := range files {
 		mapTask := MapTask{
 			Filename:  file,
 			NumReduce: c.NumReduce,
@@ -214,7 +213,6 @@ func (c *Coordinator) PrepareFinalFile() {
 func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	c := Coordinator{
 		NumReduce:      nReduce,
-		Files:          files,
 		MapTasks:       make(chan MapTask, 100),
 		ReduceTasks:    make(chan int, nReduce),
 		CompletedTasks: make(map[string]bool),
@@ -227,7 +225,7 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	// make sure mr-tmp directory exists
 	// _ = os.Mkdir("mr-tmp", os.ModePerm)
 
-	c.Start()
+	c.Start(files)
 
 	return &c
 }
