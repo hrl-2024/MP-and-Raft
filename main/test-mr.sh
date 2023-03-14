@@ -102,7 +102,7 @@ wait
 #########################################################
 echo '***' Starting map parallelism test.
 
-rm -f mr-out* mr-worker*
+rm -f mr-*
 
 timeout -k 2s 180s ../mrcoordinator ../pg*txt &
 sleep 1
@@ -133,7 +133,7 @@ wait
 #########################################################
 echo '***' Starting reduce parallelism test.
 
-rm -f mr-out* mr-worker*
+rm -f mr-*
 
 timeout -k 2s 180s ../mrcoordinator ../pg*txt &
 sleep 1
@@ -156,7 +156,7 @@ wait
 #########################################################
 echo '***' Starting job count test.
 
-rm -f mr-out* mr-worker*
+rm -f mr-*
 
 timeout -k 2s 180s ../mrcoordinator ../pg*txt &
 sleep 1
@@ -181,9 +181,9 @@ wait
 #########################################################
 # test whether any worker or coordinator exits before the
 # task has completed (i.e., all output files have been finalized)
-rm -f mr-*
-
 echo '***' Starting early exit test.
+
+rm -f mr-*
 
 timeout -k 2s 180s ../mrcoordinator ../pg*txt &
 
@@ -222,6 +222,8 @@ rm -f mr-*
 
 #########################################################
 echo '***' Starting crash test.
+
+rm -f mr-*
 
 # generate the correct output
 ../mrsequential ../../mrapps/nocrash.so ../pg*txt || exit 1
