@@ -184,45 +184,31 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	reply.Term = rf.currentTerm
 
-	if args.Term < rf.currentTerm {
+	if args.Term <= rf.currentTerm {
 		reply.VoteGranted = false
 		//fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
 		return
 	}
 
-	// if we are the leader for current term
-	if args.Term == rf.currentTerm && rf.votedFor == rf.me {
-		reply.VoteGranted = false
-		//fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
-		return
-	}
+	// grant vote
+	reply.VoteGranted = true
+	rf.votedFor = args.CandidateId
+	rf.currentTerm = args.Term
+
+	// resets its election timeout
+	rand.Seed(time.Now().UnixNano())
+	rf.electionTimeout = rand.Intn(150) + 1000
+
+	return
 
 	// if votedFor is null or candidateId
-	if rf.votedFor == -1 || rf.votedFor == args.CandidateId {
+	/*
+		if rf.votedFor == -1 || rf.votedFor == args.CandidateId {
 
-		//fmt.Println("RequestVote: rf.votedFor == -1 || rf.votedFor == args.CandidateId")
+			if len(rf.log) == 0 {
+				//fmt.Printf("RequestVote: server %d log is empty. \n", rf.me)
 
-		if len(rf.log) == 0 {
-			//fmt.Printf("RequestVote: server %d log is empty. \n", rf.me)
-
-			// grant vote
-			reply.VoteGranted = true
-			rf.votedFor = args.CandidateId
-			rf.currentTerm = args.Term
-
-			// resets its election timeout
-			rand.Seed(time.Now().UnixNano())
-			rf.electionTimeout = rand.Intn(150) + 1000
-
-			return
-
-			//fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
-		} else {
-			// Probably Part b's code
-			//fmt.Println(args.LastLogTerm, rf.log[len(rf.log)-1].Term, args.LastLogIndex, len(rf.log)-1)
-
-			// And candidate's log is at least as up-to-date as receiver's log
-			if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
+				// grant vote
 				reply.VoteGranted = true
 				rf.votedFor = args.CandidateId
 				rf.currentTerm = args.Term
@@ -231,29 +217,47 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 				rand.Seed(time.Now().UnixNano())
 				rf.electionTimeout = rand.Intn(150) + 1000
 
-				//fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
-
 				return
-			} else if args.LastLogTerm == rf.log[len(rf.log)-1].Term && args.LastLogIndex >= len(rf.log)-1 {
-				reply.VoteGranted = true
-				rf.votedFor = args.CandidateId
-				rf.currentTerm = args.Term
-
-				// resets its election timeout
-				rand.Seed(time.Now().UnixNano())
-				rf.electionTimeout = rand.Intn(150) + 1000
 
 				//fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
-				return
 			} else {
-				reply.VoteGranted = false
-				//fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
-				return
+				// Probably Part b's code
+				//fmt.Println(args.LastLogTerm, rf.log[len(rf.log)-1].Term, args.LastLogIndex, len(rf.log)-1)
+
+				// And candidate's log is at least as up-to-date as receiver's log
+				if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
+					reply.VoteGranted = true
+					rf.votedFor = args.CandidateId
+					rf.currentTerm = args.Term
+
+					// resets its election timeout
+					rand.Seed(time.Now().UnixNano())
+					rf.electionTimeout = rand.Intn(150) + 1000
+
+					//fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
+
+					return
+				} else if args.LastLogTerm == rf.log[len(rf.log)-1].Term && args.LastLogIndex >= len(rf.log)-1 {
+					reply.VoteGranted = true
+					rf.votedFor = args.CandidateId
+					rf.currentTerm = args.Term
+
+					// resets its election timeout
+					rand.Seed(time.Now().UnixNano())
+					rf.electionTimeout = rand.Intn(150) + 1000
+
+					//fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
+					return
+				} else {
+					reply.VoteGranted = false
+					//fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
+					return
+				}
 			}
 		}
-	}
 
-	fmt.Printf("RequestVote: issue here: rf.me = %d rf.currentTerm = %d rf.votedFor = %d args.CandidateId = %d args.Term = %d\n", rf.me, rf.currentTerm, rf.votedFor, args.CandidateId, args.Term)
+		fmt.Printf("RequestVote: issue here: rf.me = %d rf.currentTerm = %d rf.votedFor = %d args.CandidateId = %d args.Term = %d\n", rf.me, rf.currentTerm, rf.votedFor, args.CandidateId, args.Term)
+	*/
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -327,7 +331,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
-		//fmt.Printf("AppendEntries: server %d convert back to follower. Term = %d \n", rf.me, args.Term)
+		fmt.Printf("AppendEntries: server %d convert back to follower. Term = %d \n", rf.me, args.Term)
 		rf.votedFor = args.LeaderId
 	}
 
