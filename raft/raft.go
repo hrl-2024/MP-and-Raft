@@ -179,8 +179,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// fmt.Printf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
 
-	rf.timeLastOperation = time.Now()
-
 	reply.Term = rf.currentTerm
 
 	if args.Term <= rf.currentTerm {
@@ -188,6 +186,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
 		return
 	}
+
+	rf.timeLastOperation = time.Now()
 
 	// grant vote
 	reply.VoteGranted = true
@@ -326,8 +326,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	// fmt.Printf("AppendEntries: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
 
-	rf.timeLastOperation = time.Now()
-
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
 		// fmt.Printf("AppendEntries: server %d convert back to follower. Term = %d \n", rf.me, args.Term)
@@ -341,6 +339,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// fmt.Printf("AppendEntries: server %d denied server %d. args.Term < rf.currentTerm \n", rf.me, args.LeaderId)
 		return
 	}
+
+	rf.timeLastOperation = time.Now()
 
 	if rf.currentTerm == args.Term && args.PrevLogIndex >= len(rf.log) {
 		reply.Success = false
