@@ -503,12 +503,9 @@ func (rf *Raft) ticker() {
 
 		// check if we are leader
 		if rf.votedFor == rf.me {
-			rf.mu.Unlock()
+
 			// if leader, send out HeartBeat RPC
 			logger.Printf("Ticker: server %d is leader. Sending AppendEntryRPC. --------------------\n", rf.me)
-
-			rf.mu.Lock()
-
 			logger.Printf("        leader server %d log: %v \n", rf.me, rf.log)
 			logger.Printf("        leader server %d nextIndex: %v \n", rf.me, rf.nextIndex)
 			args := AppendEntriesArgs{
@@ -544,18 +541,15 @@ func (rf *Raft) ticker() {
 			// Candidate
 			rf.startElection()
 		} else {
-			deadline := rf.timeLastOperation.Add(time.Millisecond * time.Duration(rf.heartbeatTimeout))
-			rf.mu.Unlock()
-
 			// Follower
 			// check if time out
+			deadline := rf.timeLastOperation.Add(time.Millisecond * time.Duration(rf.heartbeatTimeout))
 			if time.Now().After(deadline) {
 				logger.Printf("Server %d timed out.\n", rf.me)
 				// if timeout, become candiate
-				rf.mu.Lock()
 				rf.votedFor = -1
-				rf.mu.Unlock()
 			}
+			rf.mu.Unlock()
 		}
 
 		// for rf.commitIndex > rf.lastApplied {

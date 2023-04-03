@@ -1,42 +1,88 @@
 Server 0 started election.
-sendRequestVote: Server 0 received vote from 2
+sendRequestVote: Server 0 received vote from 1
 server 0 is now the leader for term 1.
           server 0 has log: [{<nil> 0}] 
-sendRequestVote: Server 0 received vote from 1
-Server 1 timed out.
+sendRequestVote: Server 0 received vote from 2
 Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
-        leader server 0 log: [{<nil> 0} {99 1}] 
+        leader server 0 log: [{<nil> 0} {101 1}] 
         leader server 0 nextIndex: [1 1 1] 
-AppendEntries: server 2 has appended log. 
-               [{<nil> 0} {99 1}] 
 AppendEntries: server 1 has appended log. 
-               [{<nil> 0} {99 1}] 
+               [{<nil> 0} {101 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1}] 
 commit_checker: commitIndex = 0 
                 matchIndex = [0 0 1]
 Commit_checker: server 0 commiting log 1
-                ApplyMsg = {true 99 1 false [] 0 0}
+                ApplyMsg = {true 101 1 false [] 0 0}
 commit_checker: commitIndex = 1 
                 matchIndex = [0 1 1]
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1}] 
+        leader server 0 nextIndex: [1 2 2] 
+rf.commitIndex now = 1 
+Commit: server 1 commiting log 1
+        ApplyMsg = {true 101 1 false [] 0 0}
+AppendEntries: server 1's current log: [{<nil> 0} {101 1}] 
+rf.commitIndex now = 1 
+Commit: server 2 commiting log 1
+        ApplyMsg = {true 101 1 false [] 0 0}
+AppendEntries: server 2's current log: [{<nil> 0} {101 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1}] 
+        leader server 0 nextIndex: [1 2 2] 
+AppendEntries: server 2's current log: [{<nil> 0} {101 1}] 
+AppendEntries: server 1's current log: [{<nil> 0} {101 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1}] 
+        leader server 0 nextIndex: [1 2 2] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 2]
+Commit_checker: server 0 commiting log 2
+                ApplyMsg = {true 102 2 false [] 0 0}
+Server 1 timed out.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1}] 
+        leader server 0 nextIndex: [1 2 3] 
+rf.commitIndex now = 2 
+Commit: server 2 commiting log 2
+        ApplyMsg = {true 102 2 false [] 0 0}
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [0 1 3]
 Server 1 started election.
-sendRequestVote: Server 1 received vote from 2
-server 1 is now the leader for term 2.
-          server 1 has log: [{<nil> 0} {99 1}] 
-sendRequestVote: Server 1 received vote from 0
-Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
-        leader server 1 log: [{<nil> 0} {99 1}] 
-        leader server 1 nextIndex: [2 2 2] 
-AppendEntries: server 2's current log: [{<nil> 0} {99 1}] 
-AppendEntries: server 0's current log: [{<nil> 0} {99 1}] 
-commit_checker: commitIndex = 0 
-                matchIndex = [0 0 0]
-commit_checker: commitIndex = 0 
-                matchIndex = [0 0 0]
-Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
-        leader server 1 log: [{<nil> 0} {99 1}] 
-        leader server 1 nextIndex: [2 2 2] 
-AppendEntries: server 2's current log: [{<nil> 0} {99 1}] 
-AppendEntries: server 0's current log: [{<nil> 0} {99 1}] 
-commit_checker: commitIndex = 0 
-                matchIndex = [0 0 0]
-commit_checker: commitIndex = 0 
-                matchIndex = [0 0 0]
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+server 1 election timeout for term 2.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1} {103 1}] 
+        leader server 0 nextIndex: [1 2 4] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [0 1 4]
+Commit_checker: server 0 commiting log 3
+                ApplyMsg = {true 103 3 false [] 0 0}
+Server 1 started election.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1} {103 1}] 
+        leader server 0 nextIndex: [1 2 5] 
+rf.commitIndex now = 3 
+Commit: server 2 commiting log 3
+        ApplyMsg = {true 102 3 false [] 0 0}
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 3 
+                matchIndex = [0 1 5]
