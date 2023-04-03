@@ -346,6 +346,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
 		logger.Printf("AppendEntries: server %d denied server %d. Reason: PrevLogIndex out of range. \n", rf.me, args.LeaderId)
+		logger.Printf("                 PrevLogIndex = %d. rf.log = %v", args.PrevLogIndex, rf.log)
 		return
 	}
 
@@ -421,7 +422,9 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 			return ok
 		}
 
-		rf.nextIndex[server] -= 1
+		if rf.nextIndex[server] > 1 {
+			rf.nextIndex[server] -= 1
+		}
 
 		rf.mu.Unlock()
 
@@ -508,7 +511,7 @@ func (rf *Raft) ticker() {
 			logger.Printf("Ticker: server %d is leader. Sending AppendEntryRPC. --------------------\n", rf.me)
 			logger.Printf("        leader server %d log: %v \n", rf.me, rf.log)
 			logger.Printf("        leader server %d nextIndex: %v \n", rf.me, rf.nextIndex)
-			args := AppendEntriesArgs{
+			args_temp := AppendEntriesArgs{
 				Term:         rf.currentTerm,
 				LeaderId:     rf.me,
 				PrevLogIndex: len(rf.log) - 2,
@@ -516,8 +519,13 @@ func (rf *Raft) ticker() {
 			}
 
 			if len(rf.log) > 1 {
-				args.PrevLogTerm = rf.log[len(rf.log)-2].Term
+				args_temp.PrevLogTerm = rf.log[len(rf.log)-2].Term
 			}
+
+			// deep copy fields
+			logCopy := []logEntryWithTerm{}
+			logCopy = append(logCopy, rf.log...)
+			nextIndexCopy := rf.nextIndex
 
 			rf.mu.Unlock()
 
@@ -525,13 +533,15 @@ func (rf *Raft) ticker() {
 				if peer_index != rf.me {
 					reply := AppendEntriesReply{}
 
-					rf.mu.Lock()
+					// make copy of the args_temp
+					args := args_temp
+
 					// send the appropriate log
-					logIndexToSent := rf.nextIndex[peer_index]
-					if len(rf.log) > 1 && logIndexToSent < len(rf.log) {
-						args.Entries = []logEntryWithTerm{rf.log[logIndexToSent]}
+					logIndexToSent := nextIndexCopy[peer_index]
+					logger.Printf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
+					if len(logCopy) > 1 && logIndexToSent < len(logCopy) {
+						args.Entries = []logEntryWithTerm{logCopy[logIndexToSent]}
 					}
-					rf.mu.Unlock()
 
 					go rf.sendAppendEntries(peer_index, &args, &reply)
 				}
