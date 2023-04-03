@@ -511,21 +511,21 @@ func (rf *Raft) ticker() {
 			logger.Printf("Ticker: server %d is leader. Sending AppendEntryRPC. --------------------\n", rf.me)
 			logger.Printf("        leader server %d log: %v \n", rf.me, rf.log)
 			logger.Printf("        leader server %d nextIndex: %v \n", rf.me, rf.nextIndex)
-			args_temp := AppendEntriesArgs{
-				Term:         rf.currentTerm,
-				LeaderId:     rf.me,
-				PrevLogIndex: len(rf.log) - 2,
-				LeaderCommit: rf.commitIndex,
-			}
 
-			if len(rf.log) > 1 {
-				args_temp.PrevLogTerm = rf.log[len(rf.log)-2].Term
-			}
+			// args_temp := AppendEntriesArgs{
+			// 	Term:         rf.currentTerm,
+			// 	LeaderId:     rf.me,
+			// 	PrevLogIndex: len(rf.log) - 2,
+			// 	LeaderCommit: rf.commitIndex,
+			// }
 
 			// deep copy fields
+			TermCopy := rf.currentTerm
+			LeaderIdCopy := rf.me
 			logCopy := []logEntryWithTerm{}
 			logCopy = append(logCopy, rf.log...)
 			nextIndexCopy := rf.nextIndex
+			commitIndexCopy := rf.commitIndex
 
 			rf.mu.Unlock()
 
@@ -534,7 +534,16 @@ func (rf *Raft) ticker() {
 					reply := AppendEntriesReply{}
 
 					// make copy of the args_temp
-					args := args_temp
+					args := AppendEntriesArgs{
+						Term:         TermCopy,
+						LeaderId:     LeaderIdCopy,
+						PrevLogIndex: nextIndexCopy[peer_index] - 1,
+						LeaderCommit: commitIndexCopy,
+					}
+
+					if len(logCopy) > 1 {
+						args.PrevLogTerm = logCopy[args.PrevLogIndex].Term
+					}
 
 					// send the appropriate log
 					logIndexToSent := nextIndexCopy[peer_index]
