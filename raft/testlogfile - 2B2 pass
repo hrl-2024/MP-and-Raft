@@ -1,0 +1,429 @@
+Server 1 started election.
+sendRequestVote: Server 1 received vote from 2
+server 1 is now the leader for term 1.
+          server 1 has log: [{<nil> 0}] 
+sendRequestVote: Server 1 received vote from 0
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1}] 
+        leader server 1 nextIndex: [1 1 1] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1}] 
+commit_checker: commitIndex = 0 
+                matchIndex = [1 0 0]
+Commit_checker: server 1 commiting log 1
+                ApplyMsg = {true 99 1 false [] 0 0}
+                ApplyMsg's Command = 99
+commit_checker: commitIndex = 1 
+                matchIndex = [1 0 1]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1}] 
+        leader server 1 nextIndex: [2 1 2] 
+rf.commitIndex now = 1 
+Commit: server 0 commiting log 1
+        ApplyMsg = {true 99 1 false [] 0 0}
+        ApplyMsg's Command = 99
+AppendEntries: server 0's current log: [{<nil> 0} {99 1}] 
+rf.commitIndex now = 1 
+Commit: server 2 commiting log 1
+commit_checker: commitIndex = 1 
+                matchIndex = [1 0 1]
+        ApplyMsg = {true 99 1 false [] 0 0}
+        ApplyMsg's Command = 99
+AppendEntries: server 2's current log: [{<nil> 0} {99 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [1 0 1]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1}] 
+        leader server 1 nextIndex: [2 1 2] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1}] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [1 0 2]
+Commit_checker: server 1 commiting log 2
+                ApplyMsg = {true {command message 1} 2 false [] 0 0}
+                ApplyMsg's Command = {command message 1}
+commit_checker: commitIndex = 2 
+                matchIndex = [2 0 2]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1}] 
+        leader server 1 nextIndex: [3 1 3] 
+rf.commitIndex now = 2 
+Commit: server 2 commiting log 2
+rf.commitIndex now = 2 
+Commit: server 0 commiting log 2
+        ApplyMsg = {true {command message 1} 2 false [] 0 0}
+        ApplyMsg's Command = {command message 1}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1}] 
+        ApplyMsg = {true {command message 1} 2 false [] 0 0}
+commit_checker: commitIndex = 2 
+                matchIndex = [2 0 2]
+        ApplyMsg's Command = {command message 1}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [2 0 2]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+        leader server 1 nextIndex: [3 1 3] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [2 0 3]
+Commit_checker: server 1 commiting log 3
+                ApplyMsg = {true {command message 2} 3 false [] 0 0}
+                ApplyMsg's Command = {command message 2}
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+commit_checker: commitIndex = 3 
+                matchIndex = [3 0 3]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+        leader server 1 nextIndex: [4 1 4] 
+rf.commitIndex now = 3 
+Commit: server 0 commiting log 3
+rf.commitIndex now = 3 
+Commit: server 2 commiting log 3
+        ApplyMsg = {true {command message 2} 3 false [] 0 0}
+        ApplyMsg's Command = {command message 2}
+        ApplyMsg = {true {command message 2} 3 false [] 0 0}
+        ApplyMsg's Command = {command message 2}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1}] 
+commit_checker: commitIndex = 3 
+                matchIndex = [3 0 3]
+commit_checker: commitIndex = 3 
+                matchIndex = [3 0 3]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+        leader server 1 nextIndex: [4 1 4] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+commit_checker: commitIndex = 3 
+                matchIndex = [4 0 3]
+Commit_checker: server 1 commiting log 4
+                ApplyMsg = {true {command message 3} 4 false [] 0 0}
+                ApplyMsg's Command = {command message 3}
+commit_checker: commitIndex = 4 
+                matchIndex = [4 0 4]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+        leader server 1 nextIndex: [5 1 5] 
+rf.commitIndex now = 4 
+Commit: server 2 commiting log 4
+rf.commitIndex now = 4 
+Commit: server 0 commiting log 4
+        ApplyMsg = {true {command message 3} 4 false [] 0 0}
+        ApplyMsg's Command = {command message 3}
+        ApplyMsg = {true {command message 3} 4 false [] 0 0}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+        ApplyMsg's Command = {command message 3}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1}] 
+commit_checker: commitIndex = 4 
+                matchIndex = [4 0 4]
+commit_checker: commitIndex = 4 
+                matchIndex = [4 0 4]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+        leader server 1 nextIndex: [5 1 5] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+commit_checker: commitIndex = 4 
+                matchIndex = [4 0 5]
+Commit_checker: server 1 commiting log 5
+                ApplyMsg = {true {command message 4} 5 false [] 0 0}
+                ApplyMsg's Command = {command message 4}
+commit_checker: commitIndex = 5 
+                matchIndex = [5 0 5]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+        leader server 1 nextIndex: [6 1 6] 
+rf.commitIndex now = 5 
+Commit: server 2 commiting log 5
+rf.commitIndex now = 5 
+Commit: server 0 commiting log 5
+        ApplyMsg = {true {command message 4} 5 false [] 0 0}
+        ApplyMsg's Command = {command message 4}
+        ApplyMsg = {true {command message 4} 5 false [] 0 0}
+        ApplyMsg's Command = {command message 4}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1}] 
+commit_checker: commitIndex = 5 
+                matchIndex = [5 0 5]
+commit_checker: commitIndex = 5 
+                matchIndex = [5 0 5]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+        leader server 1 nextIndex: [6 1 6] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+commit_checker: commitIndex = 5 
+                matchIndex = [6 0 5]
+Commit_checker: server 1 commiting log 6
+                ApplyMsg = {true {command message 5} 6 false [] 0 0}
+                ApplyMsg's Command = {command message 5}
+commit_checker: commitIndex = 6 
+                matchIndex = [6 0 6]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+        leader server 1 nextIndex: [7 1 7] 
+rf.commitIndex now = 6 
+Commit: server 2 commiting log 6
+rf.commitIndex now = 6 
+Commit: server 0 commiting log 6
+        ApplyMsg = {true {command message 5} 6 false [] 0 0}
+        ApplyMsg's Command = {command message 5}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+        ApplyMsg = {true {command message 5} 6 false [] 0 0}
+        ApplyMsg's Command = {command message 5}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1}] 
+commit_checker: commitIndex = 6 
+                matchIndex = [6 0 6]
+commit_checker: commitIndex = 6 
+                matchIndex = [6 0 6]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+        leader server 1 nextIndex: [7 1 7] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+commit_checker: commitIndex = 6 
+                matchIndex = [7 0 6]
+Commit_checker: server 1 commiting log 7
+                ApplyMsg = {true {command message 6} 7 false [] 0 0}
+                ApplyMsg's Command = {command message 6}
+commit_checker: commitIndex = 7 
+                matchIndex = [7 0 7]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+        leader server 1 nextIndex: [8 1 8] 
+rf.commitIndex now = 7 
+Commit: server 2 commiting log 7
+        ApplyMsg = {true {command message 6} 7 false [] 0 0}
+        ApplyMsg's Command = {command message 6}
+rf.commitIndex now = 7 
+Commit: server 0 commiting log 7
+        ApplyMsg = {true {command message 6} 7 false [] 0 0}
+        ApplyMsg's Command = {command message 6}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+commit_checker: commitIndex = 7 
+                matchIndex = [7 0 7]
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1}] 
+commit_checker: commitIndex = 7 
+                matchIndex = [7 0 7]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+        leader server 1 nextIndex: [8 1 8] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+commit_checker: commitIndex = 7 
+                matchIndex = [7 0 8]
+Commit_checker: server 1 commiting log 8
+                ApplyMsg = {true {command message 7} 8 false [] 0 0}
+                ApplyMsg's Command = {command message 7}
+commit_checker: commitIndex = 8 
+                matchIndex = [8 0 8]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+        leader server 1 nextIndex: [9 1 9] 
+rf.commitIndex now = 8 
+Commit: server 2 commiting log 8
+        ApplyMsg = {true {command message 7} 8 false [] 0 0}
+        ApplyMsg's Command = {command message 7}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+commit_checker: commitIndex = 8 
+                matchIndex = [8 0 8]
+rf.commitIndex now = 8 
+Commit: server 0 commiting log 8
+        ApplyMsg = {true {command message 7} 8 false [] 0 0}
+        ApplyMsg's Command = {command message 7}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1}] 
+commit_checker: commitIndex = 8 
+                matchIndex = [8 0 8]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+        leader server 1 nextIndex: [9 1 9] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+commit_checker: commitIndex = 8 
+                matchIndex = [9 0 8]
+Commit_checker: server 1 commiting log 9
+                ApplyMsg = {true {command message 8} 9 false [] 0 0}
+                ApplyMsg's Command = {command message 8}
+commit_checker: commitIndex = 9 
+                matchIndex = [9 0 9]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+        leader server 1 nextIndex: [10 1 10] 
+rf.commitIndex now = 9 
+Commit: server 0 commiting log 9
+        ApplyMsg = {true {command message 8} 9 false [] 0 0}
+        ApplyMsg's Command = {command message 8}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+rf.commitIndex now = 9 
+Commit: server 2 commiting log 9
+commit_checker: commitIndex = 9 
+                matchIndex = [9 0 9]
+        ApplyMsg = {true {command message 8} 9 false [] 0 0}
+        ApplyMsg's Command = {command message 8}
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1}] 
+commit_checker: commitIndex = 9 
+                matchIndex = [9 0 9]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+        leader server 1 nextIndex: [10 1 10] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+commit_checker: commitIndex = 9 
+                matchIndex = [9 0 10]
+Commit_checker: server 1 commiting log 10
+                ApplyMsg = {true {command message 9} 10 false [] 0 0}
+                ApplyMsg's Command = {command message 9}
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+commit_checker: commitIndex = 10 
+                matchIndex = [10 0 10]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+        leader server 1 nextIndex: [11 1 11] 
+rf.commitIndex now = 10 
+Commit: server 0 commiting log 10
+rf.commitIndex now = 10 
+Commit: server 2 commiting log 10
+        ApplyMsg = {true {command message 9} 10 false [] 0 0}
+        ApplyMsg's Command = {command message 9}
+        ApplyMsg = {true {command message 9} 10 false [] 0 0}
+        ApplyMsg's Command = {command message 9}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1}] 
+commit_checker: commitIndex = 10 
+                matchIndex = [10 0 10]
+commit_checker: commitIndex = 10 
+                matchIndex = [10 0 10]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+        leader server 1 nextIndex: [11 1 11] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+AppendEntries: server 0 has appended log. 
+               [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+commit_checker: commitIndex = 10 
+                matchIndex = [10 0 11]
+Commit_checker: server 1 commiting log 11
+                ApplyMsg = {true {command message 10} 11 false [] 0 0}
+                ApplyMsg's Command = {command message 10}
+commit_checker: commitIndex = 11 
+                matchIndex = [11 0 11]
+Ticker: server 1 is leader. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+        leader server 1 nextIndex: [12 1 12] 
+rf.commitIndex now = 11 
+Commit: server 2 commiting log 11
+        ApplyMsg = {true {command message 10} 11 false [] 0 0}
+rf.commitIndex now = 11 
+Commit: server 0 commiting log 11
+        ApplyMsg = {true {command message 10} 11 false [] 0 0}
+        ApplyMsg's Command = {command message 10}
+        ApplyMsg's Command = {command message 10}
+AppendEntries: server 0's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+AppendEntries: server 2's current log: [{<nil> 0} {99 1} {{command message 1} 1} {{command message 2} 1} {{command message 3} 1} {{command message 4} 1} {{command message 5} 1} {{command message 6} 1} {{command message 7} 1} {{command message 8} 1} {{command message 9} 1} {{command message 10} 1}] 
+commit_checker: commitIndex = 11 
+                matchIndex = [11 0 11]
+commit_checker: commitIndex = 11 
+                matchIndex = [11 0 11]
+Server 0 started election.
+sendRequestVote: Server 0 received vote from 2
+sendRequestVote: Server 0 received vote from 1
+server 0 is now the leader for term 1.
+          server 0 has log: [{<nil> 0}] 
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1}] 
+        leader server 0 nextIndex: [1 1 1] 
+AppendEntries: server 1 has appended log. 
+               [{<nil> 0} {101 1}] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1}] 
+commit_checker: commitIndex = 0 
+                matchIndex = [0 1 0]
+Commit_checker: server 0 commiting log 1
+                ApplyMsg = {true 101 1 false [] 0 0}
+                ApplyMsg's Command = 101
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1}] 
+        leader server 0 nextIndex: [1 2 2] 
+rf.commitIndex now = 1 
+Commit: server 2 commiting log 1
+        ApplyMsg = {true 101 1 false [] 0 0}
+        ApplyMsg's Command = 101
+AppendEntries: server 2's current log: [{<nil> 0} {101 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+rf.commitIndex now = 1 
+Commit: server 1 commiting log 1
+        ApplyMsg = {true 101 1 false [] 0 0}
+        ApplyMsg's Command = 101
+AppendEntries: server 1's current log: [{<nil> 0} {101 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 1]
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1}] 
+        leader server 0 nextIndex: [1 2 2] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1}] 
+commit_checker: commitIndex = 1 
+                matchIndex = [0 1 2]
+Commit_checker: server 0 commiting log 2
+                ApplyMsg = {true 102 2 false [] 0 0}
+                ApplyMsg's Command = 102
+Server 1 timed out.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1}] 
+        leader server 0 nextIndex: [1 2 3] 
+rf.commitIndex now = 2 
+Commit: server 2 commiting log 2
+        ApplyMsg = {true 102 2 false [] 0 0}
+        ApplyMsg's Command = 102
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [0 1 3]
+Server 1 started election.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1} {103 1}] 
+        leader server 0 nextIndex: [1 2 4] 
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 2 
+                matchIndex = [0 1 4]
+Commit_checker: server 0 commiting log 3
+                ApplyMsg = {true 103 3 false [] 0 0}
+                ApplyMsg's Command = 103
+server 1 election timeout for term 2.
+Ticker: server 0 is leader. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0} {101 1} {102 1} {103 1}] 
+        leader server 0 nextIndex: [1 2 5] 
+rf.commitIndex now = 3 
+Commit: server 2 commiting log 3
+        ApplyMsg = {true 102 3 false [] 0 0}
+        ApplyMsg's Command = 102
+AppendEntries: server 2 has appended log. 
+               [{<nil> 0} {101 1} {102 1} {102 1} {102 1} {102 1}] 
+commit_checker: commitIndex = 3 
+                matchIndex = [0 1 5]
