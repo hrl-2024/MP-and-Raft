@@ -681,7 +681,7 @@ func (rf *Raft) commit_checker() {
 				counter++
 			}
 			if counter > overHalf {
-				logger.Printf("                %d\n", index)
+				// logger.Printf("                %d\n", index)
 				break
 			}
 		}
