@@ -394,8 +394,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			logger.Printf("                ApplyMsg = %v\n", applymessage)
 			// logger.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
 		}
-
-		rf.commitIndex = N
 	}
 
 	if len(args.Entries) == 0 {
@@ -549,6 +547,12 @@ func (rf *Raft) ticker() {
 			rf.mu.Unlock()
 
 			for peer_index, _ := range rf.peers {
+				rf.mu.Lock()
+				if rf.votedFor != rf.me {
+					break
+				}
+				rf.mu.Unlock()
+
 				if peer_index != rf.me {
 					reply := AppendEntriesReply{}
 
