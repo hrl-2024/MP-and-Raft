@@ -35,7 +35,7 @@ var (
 )
 
 // timeout low bound and range
-var timeoutLowBound = 1000
+var timeoutLowBound = 150
 var timeoutRange = 150
 
 // import "bytes"
@@ -323,12 +323,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	// logger.Printf("AppendEntries: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
+	// logger.Printf("AppendEntries from %d: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
 
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
-		logger.Printf("AppendEntries: server %d convert back to follower. Term = %d \n", rf.me, args.Term)
+		logger.Printf("AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
 		rf.votedFor = args.LeaderId
+		return
 	}
 
 	reply.Term = rf.currentTerm
@@ -336,55 +337,73 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	if args.Term < rf.currentTerm {
 		reply.Success = false
-		logger.Printf("AppendEntries: server %d denied server %d. Reason: 1. \n", rf.me, args.LeaderId)
+		logger.Printf("AppendEntries from %d: server %d denied server %d. Reason: 1.\n", args.LeaderId, rf.me, args.LeaderId)
+		return
+	}
+
+	if args.LeaderId != rf.votedFor {
+		reply.Success = false
+		logger.Printf("AppendEntries from %d: server %d denied server %d. Not my leader.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
 	rf.timeLastOperation = time.Now()
 
-	// 2. Reply false if log doesn't contain an entry at prevLogIndex whose term matches prevLogTerm
+	// 2. Reply false if log doesn't contain an entry at prevLogIndex ...
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
-		logger.Printf("AppendEntries: server %d denied server %d. Reason: PrevLogIndex out of range. \n", rf.me, args.LeaderId)
+		logger.Printf("AppendEntries from %d: server %d denied server %d. Reason 2. \n", args.LeaderId, rf.me, args.LeaderId)
+		logger.Printf("                 PrevLogIndex = %d. rf.log = %v", args.PrevLogIndex, rf.log)
+		return
+	}
+
+	// 2.1 ... whose term matches prevLogTerm
+	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term != args.PrevLogTerm {
+		reply.Success = false
+		logger.Printf("AppendEntries from %d: server %d denied server %d. Reason 2.1. \n", args.LeaderId, rf.me, args.LeaderId)
 		logger.Printf("                 PrevLogIndex = %d. rf.log = %v", args.PrevLogIndex, rf.log)
 		return
 	}
 
 	// 3. If an existing entry conflicts with a new one (same index but different terms),
 	// delete the existing entry and all that follow it.
-	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term != args.PrevLogTerm {
-		logger.Printf("AppendEntries: server %d deleting log until log[%d] \n", rf.me, args.PrevLogIndex)
+	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term == args.PrevLogTerm {
+		logger.Printf("AppendEntries from %d: server %d deleting log after log[%d] \n", args.LeaderId, rf.me, args.PrevLogIndex)
 		rf.log = rf.log[:args.PrevLogIndex+1]
 	}
 
+	rf.log = append(rf.log, args.Entries...)
+	logger.Printf("AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
+
+	reply.Success = true
+
 	if args.LeaderCommit > rf.commitIndex {
-		rf.commitIndex = min(args.LeaderCommit, args.PrevLogIndex+1)
+		N := min(args.LeaderCommit, args.PrevLogIndex+1)
 
-		logger.Printf("rf.commitIndex now = %d \n", rf.commitIndex)
+		logger.Printf("        rf.commitIndex now = %d \n", N)
 
-		logger.Printf("Commit: server %d commiting log %d\n", rf.me, rf.commitIndex)
-
-		applymessage := ApplyMsg{
-			CommandValid: true,
-			Command:      rf.log[rf.commitIndex].Command,
-			CommandIndex: rf.commitIndex,
+		for i := rf.commitIndex + 1; i <= N; i++ {
+			logger.Printf("Commit: server %d commiting log %d\n", rf.me, i)
+			rf.commitIndex = i
+			applymessage := ApplyMsg{
+				CommandValid: true,
+				Command:      rf.log[i].Command,
+				CommandIndex: i,
+			}
+			rf.applyCh <- applymessage
+			logger.Printf("                ApplyMsg = %v\n", applymessage)
+			// logger.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
 		}
-		rf.applyCh <- applymessage
 
-		logger.Printf("        ApplyMsg = %v\n", applymessage)
-		// logger.Printf("        ApplyMsg's Command = %v\n", rf.log[rf.commitIndex].Command)
+		rf.commitIndex = N
 	}
 
 	if len(args.Entries) == 0 {
 		// heartbeat messages
 		reply.Success = true
-		logger.Printf("AppendEntries: server %d's current log: %v \n", rf.me, rf.log)
+		logger.Printf("AppendEntries from %d: server %d's current log: %v \n", args.LeaderId, rf.me, rf.log)
 		return
 	}
-	rf.log = append(rf.log, args.Entries...)
-	logger.Printf("AppendEntries: server %d has appended log. \n               %v \n", rf.me, rf.log)
-
-	reply.Success = true
 }
 
 func min(a int, b int) int {
@@ -399,22 +418,22 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
 
 	if !ok {
-		// logger.Printf("sendAppendEntries: Server %d Call(\"Raft%d.AppendEntries\") failed.\n", args.LeaderId, server)
+		// logger.Printf("sendAppendEntries from %d: Server %d Call(\"Raft%d.AppendEntries\") failed.\n", args.LeaderId, server)
 		return ok
 	}
 
 	if reply.Success {
-		// logger.Printf("sendAppendEntries: server %d's request to server %d succeed.\n", args.LeaderId, server)
+		// logger.Printf("sendAppendEntries from %d: server %d's request to server %d succeed.\n", args.LeaderId, server)
 		rf.mu.Lock()
-		rf.nextIndex[server] += len(args.Entries)
-		rf.matchIndex[server] += len(args.Entries)
+		rf.nextIndex[server] = args.PrevLogIndex + len(args.Entries) + 1
+		rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
 
 		rf.commit_checker()
 		rf.mu.Unlock()
 	} else {
 		rf.mu.Lock()
 		if reply.Term > rf.currentTerm {
-			logger.Printf("sendAppendEntries: candidate %d's term is higher than mine (%d).\n", server, args.LeaderId)
+			logger.Printf("AppendEntries: candidate %d's term is higher than mine (%d).\n", server, args.LeaderId)
 			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
 			rf.timeLastOperation = time.Now()
@@ -547,7 +566,7 @@ func (rf *Raft) ticker() {
 
 					// send the appropriate log
 					logIndexToSent := nextIndexCopy[peer_index]
-					logger.Printf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
+					// logger.Printf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
 					if len(logCopy) > 1 && logIndexToSent < len(logCopy) {
 						args.Entries = []logEntryWithTerm{logCopy[logIndexToSent]}
 					}
@@ -654,25 +673,29 @@ func (rf *Raft) commit_checker() {
 	for N := rf.commitIndex + 1; N < len(rf.log); N++ {
 		counter := 1
 		for _, index := range rf.matchIndex {
-			if index > N {
+			if index >= N {
 				counter++
 			}
-			if counter >= overHalf {
+			if counter > overHalf {
+				logger.Printf("                %d\n", index)
 				break
 			}
 		}
 
-		if counter >= overHalf && rf.log[N].Term == rf.currentTerm {
-			logger.Printf("Commit_checker: server %d commiting log %d\n", rf.me, N)
-			rf.commitIndex = N
-			applymessage := ApplyMsg{
-				CommandValid: true,
-				Command:      rf.log[N].Command,
-				CommandIndex: N,
+		if counter > overHalf && rf.log[N].Term == rf.currentTerm {
+			for i := rf.commitIndex + 1; i <= N; i++ {
+				logger.Printf("Commit_checker: server %d commiting log %d\n", rf.me, i)
+				rf.commitIndex = i
+				applymessage := ApplyMsg{
+					CommandValid: true,
+					Command:      rf.log[i].Command,
+					CommandIndex: i,
+				}
+				rf.applyCh <- applymessage
+				logger.Printf("                ApplyMsg = %v\n", applymessage)
+				// logger.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
 			}
-			rf.applyCh <- applymessage
-			logger.Printf("                ApplyMsg = %v\n", applymessage)
-			// logger.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
+
 			break
 		}
 	}
