@@ -527,7 +527,7 @@ func (rf *Raft) ticker() {
 		if rf.votedFor == rf.me {
 
 			// if leader, send out HeartBeat RPC
-			logger.Printf("Ticker: server %d is leader. Sending AppendEntryRPC. --------------------\n", rf.me)
+			logger.Printf("Ticker: server %d is leader for term %d. Sending AppendEntryRPC. --------------------\n", rf.me, rf.currentTerm)
 			logger.Printf("        leader server %d log: %v \n", rf.me, rf.log)
 			logger.Printf("        leader server %d nextIndex: %v \n", rf.me, rf.nextIndex)
 
