@@ -475,6 +475,86 @@ func TestBackup2B(t *testing.T) {
 	cfg.end()
 }
 
+func TestRLBackup2B(t *testing.T) {
+	servers := 5
+	cfg := make_config(t, servers, false, false)
+	defer cfg.cleanup()
+
+	cfg.begin("Test (2B): leader backs up quickly over incorrect follower logs")
+
+	cfg.one(1, servers, true)
+
+	// put leader and one follower in a partition
+	leader1 := cfg.checkOneLeader()
+	cfg.disconnect((leader1 + 2) % servers)
+	cfg.disconnect((leader1 + 3) % servers)
+	cfg.disconnect((leader1 + 4) % servers)
+
+	// submit lots of commands that won't commit
+	for i := 0; i < 50; i++ {
+		cfg.rafts[leader1].Start(rand.Int())
+	}
+
+	time.Sleep(RaftElectionTimeout / 2)
+
+	cfg.disconnect((leader1 + 0) % servers)
+	cfg.disconnect((leader1 + 1) % servers)
+
+	// allow other partition to recover
+	cfg.connect((leader1 + 2) % servers)
+	cfg.connect((leader1 + 3) % servers)
+	cfg.connect((leader1 + 4) % servers)
+
+	// lots of successful commands to new group.
+	for i := 2; i < 52; i++ {
+		cfg.one(i, 3, true)
+	}
+
+	fmt.Printf("Server %d %d %d should have 50 successul commands.\n", (leader1+2)%servers, (leader1+3)%servers, (leader1+4)%servers)
+
+	// now another partitioned leader and one follower
+	leader2 := cfg.checkOneLeader()
+	other := (leader1 + 2) % servers
+	if leader2 == other {
+		other = (leader2 + 1) % servers
+	}
+	cfg.disconnect(other)
+
+	// lots more commands that won't commit
+	for i := 0; i < 50; i++ {
+		cfg.rafts[leader2].Start(rand.Int())
+	}
+
+	time.Sleep(RaftElectionTimeout / 2)
+
+	// bring original leader back to life,
+	for i := 0; i < servers; i++ {
+		cfg.disconnect(i)
+	}
+	cfg.connect((leader1 + 0) % servers)
+	cfg.connect((leader1 + 1) % servers)
+	cfg.connect(other)
+
+	fmt.Printf("Check %d's log. May have some garbage.\n", other)
+
+	// lots of successful commands to new group.
+	for i := 52; i < 102; i++ {
+		cfg.one(i, 3, true)
+	}
+
+	fmt.Printf("Check %d's log. should have 101 clean log\n", other)
+
+	// now everyone
+	for i := 0; i < servers; i++ {
+		cfg.connect(i)
+	}
+	cfg.one(102, servers, true)
+
+	fmt.Println("Check everone's log. should have 101 clean log")
+
+	cfg.end()
+}
+
 func TestCount2B(t *testing.T) {
 	servers := 3
 	cfg := make_config(t, servers, false, false)
