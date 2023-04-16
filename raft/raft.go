@@ -94,7 +94,8 @@ type Raft struct {
 	matchIndex []int // index of heighest log entry known to be replicated on each server (initlized to leader last log index + 1)
 
 	// state for election
-	voteReceived int // # of votes received
+	voteReceived      int  // # of votes received
+	myElectionStarted bool // indicate if this server has started a election
 
 	// for timeout
 	electionTimeout   int       // election's time out in millisecond
@@ -182,9 +183,10 @@ type RequestVoteArgs struct {
 // field names must start with capital letters!
 type RequestVoteReply struct {
 	// Your data here (2A).
-	Term        int  // currentTerm, for candidate to update itself
-	LeaderId    int  // the actual leader id for the upper term, for candidate to update itself
-	VoteGranted bool // true means candidate received vote
+	Term              int  // currentTerm, for candidate to update itself
+	LeaderId          int  // the actual leader id for the upper term, for candidate to update itself
+	VoteGranted       bool // true means candidate received vote
+	FailDueToElection bool // true means the receipient is in election, reach it later.
 }
 
 // example RequestVote RPC handler.
@@ -195,17 +197,35 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// fmt.Printf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
 
+	if rf.myElectionStarted {
+		reply.VoteGranted = false
+		reply.FailDueToElection = true
+		// can't grant vote
+		return
+	}
+
 	reply.Term = rf.currentTerm
 	reply.LeaderId = rf.votedFor
+	reply.FailDueToElection = false
 
-	if args.Term < rf.currentTerm {
+	if args.Term > rf.currentTerm && rf.votedFor == rf.me {
+		// convert back to follower
+		fmt.Printf("RequestVote: server %d step down by server %d.\n", rf.me, args.CandidateId)
+		reply.VoteGranted = false
+		rf.currentTerm = args.Term
+		rf.votedFor = args.CandidateId
+		rf.timeLastOperation = time.Now()
+		return
+	}
+
+	if args.Term <= rf.currentTerm {
 		reply.VoteGranted = false
 		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
 		return
 	}
 
 	// if there is a leader for current term already
-	if args.Term == rf.currentTerm && rf.votedFor != -1 {
+	if args.Term == rf.currentTerm && (rf.votedFor != -1 || rf.myElectionStarted) {
 		reply.VoteGranted = false
 		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
 		return
@@ -224,9 +244,9 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rand.Seed(time.Now().UnixNano())
 		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-		return
+		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: self log empty\n", rf.me, args.CandidateId)
 
-		// fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
+		return
 	} else if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
 		// grant vote if candidate's log is at least as up-to-date as receiver's log
 		rf.timeLastOperation = time.Now()
@@ -239,7 +259,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rand.Seed(time.Now().UnixNano())
 		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-		// fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
+		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: candidate's term is bigger.\n", rf.me, args.CandidateId)
 
 		return
 	} else if args.LastLogTerm == rf.log[len(rf.log)-1].Term && args.LastLogIndex+1 > len(rf.log)-1 {
@@ -253,9 +273,10 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rand.Seed(time.Now().UnixNano())
 		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-		// fmt.Printf("RequestVote: server %d grant vote to server %d.\n", rf.me, args.CandidateId)
+		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: same term, but candidate's log is more up-to-dated.\n", rf.me, args.CandidateId)
 		return
 	} else {
+		rf.currentTerm = max(rf.currentTerm, args.Term)
 		reply.VoteGranted = false
 		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
 		return
@@ -297,18 +318,31 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 		return ok
 	}
 
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
 	if reply.VoteGranted {
-		if args.Term == rf.currentTerm && rf.votedFor == -1 {
+		rf.mu.Lock()
+		if args.Term == rf.currentTerm && rf.myElectionStarted {
 			fmt.Printf("sendRequestVote: Server %d received vote for term %d from %d\n", args.CandidateId, args.Term, server)
 			rf.voteReceived += 1
 		}
+		rf.mu.Unlock()
 	} else {
-		rf.currentTerm = reply.Term
-		rf.votedFor = reply.LeaderId
-		rf.timeLastOperation = time.Now()
+		if !reply.FailDueToElection && reply.LeaderId == server {
+			// leader stepped down. Do nothing
+			fmt.Printf("sendRequestVote: %d(%d) - reply.LeaderId == server %d \n", args.CandidateId, args.Term, server)
+			return ok
+		}
+
+		if !reply.FailDueToElection {
+			rf.mu.Lock()
+			fmt.Printf("sendRequestVote: Server %d denied %d for term %d. And failed not because of election \n", server, args.CandidateId, args.Term)
+			rf.currentTerm = max(rf.currentTerm, reply.Term)
+			rf.votedFor = reply.LeaderId
+			rf.timeLastOperation = time.Now()
+			rf.mu.Unlock()
+		} else {
+			// fmt.Printf("sendRequestVote: %d(%d) Server %d is busy with its election. Retry \n", args.CandidateId, args.Term, server)
+			rf.sendRequestVote(server, args, reply)
+		}
 	}
 
 	return ok
@@ -335,9 +369,17 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	// fmt.Printf("AppendEntries from %d: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
 
+	if rf.myElectionStarted {
+		// gotta wait
+		reply.Success = false
+		fmt.Printf("    AppendEntries from %d: server %d in election. Gotta wait. \n", args.LeaderId, rf.me)
+		return
+	}
+
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
-		fmt.Printf("AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
+		fmt.Printf("    AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
+		rf.timeLastOperation = time.Now()
 		rf.votedFor = args.LeaderId
 		return
 	}
@@ -347,7 +389,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	if args.Term < rf.currentTerm {
 		reply.Success = false
-		fmt.Printf("AppendEntries from %d: server %d denied server %d. Reason: 1.\n", args.LeaderId, rf.me, args.LeaderId)
+		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason: 1.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
@@ -362,26 +404,26 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	// 2. Reply false if log doesn't contain an entry at prevLogIndex ...
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
-		fmt.Printf("AppendEntries from %d: server %d denied server %d. Reason 2.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
+		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
 		return
 	}
 
 	// 2.1 ... whose term matches prevLogTerm
 	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term != args.PrevLogTerm {
 		reply.Success = false
-		fmt.Printf("AppendEntries from %d: server %d denied server %d. Reason 2.1.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
+		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.1.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
 		return
 	}
 
 	// 3. If an existing entry conflicts with a new one (same index but different terms),
 	// delete the existing entry and all that follow it.
 	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term == args.PrevLogTerm {
-		fmt.Printf("AppendEntries from %d: server %d deleting log after log[%d] \n", args.LeaderId, rf.me, args.PrevLogIndex)
+		fmt.Printf("    AppendEntries from %d: server %d deleting log after log[%d] \n", args.LeaderId, rf.me, args.PrevLogIndex)
 		rf.log = rf.log[:args.PrevLogIndex+1]
 	}
 
 	rf.log = append(rf.log, args.Entries...)
-	fmt.Printf("AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
+	fmt.Printf("    AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
 
 	reply.Success = true
 
@@ -407,13 +449,21 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if len(args.Entries) == 0 {
 		// heartbeat messages
 		reply.Success = true
-		fmt.Printf("AppendEntries from %d: server %d's current log: %v \n", args.LeaderId, rf.me, rf.log)
+		fmt.Printf("    AppendEntries from %d: server %d's current log: %v \n", args.LeaderId, rf.me, rf.log)
 		return
 	}
 }
 
 func min(a int, b int) int {
 	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
+func max(a int, b int) int {
+	if a > b {
 		return a
 	} else {
 		return b
@@ -437,8 +487,13 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 		rf.commit_checker()
 		rf.mu.Unlock()
 	} else {
+		if reply.LeaderId == -1 {
+			// this mean that server is in election. Don't trust its votedFor and step down.
+			return ok
+		}
+
 		rf.mu.Lock()
-		if reply.Term > rf.currentTerm {
+		if reply.Term > rf.currentTerm && reply.LeaderId != -1 {
 			fmt.Printf("sendAppendEntries: candidate %d's term is higher than mine (%d).\n", server, args.LeaderId)
 			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
@@ -475,7 +530,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	defer rf.mu.Unlock()
 	index := len(rf.log)
 	term := rf.currentTerm
-	isLeader := rf.me == rf.votedFor
+	isLeader := rf.me == rf.votedFor && !rf.myElectionStarted
 
 	// Your code here (2B).
 	if !isLeader {
@@ -596,7 +651,7 @@ func (rf *Raft) ticker() {
 			// Follower
 			// check if time out
 			deadline := rf.timeLastOperation.Add(time.Millisecond * time.Duration(rf.heartbeatTimeout))
-			if time.Now().After(deadline) {
+			if time.Now().After(deadline) && !rf.myElectionStarted {
 				fmt.Printf("Server %d timed out.\n", rf.me)
 				// if timeout, become candiate
 				rf.votedFor = -1
@@ -614,7 +669,7 @@ func (rf *Raft) ticker() {
 
 func (rf *Raft) startElection(term int) bool {
 	rf.mu.Lock()
-	if rf.currentTerm > term || rf.votedFor != -1 {
+	if rf.currentTerm >= term && rf.votedFor != -1 {
 		rf.mu.Unlock()
 		return false
 	}
@@ -622,6 +677,7 @@ func (rf *Raft) startElection(term int) bool {
 	rf.timeLastOperation = time.Now()
 
 	rf.currentTerm += 1
+	rf.myElectionStarted = true
 	rf.voteReceived = 1
 
 	rand.Seed(time.Now().UnixNano())
@@ -655,8 +711,9 @@ func (rf *Raft) startElection(term int) bool {
 
 	for time.Now().Before(deadline) {
 		rf.mu.Lock()
-		if rf.currentTerm > term || rf.votedFor != -1 {
-			fmt.Printf("server %d election for term %d failed. currentTerm = %d. votedFor = %d\n", rf.me, args.Term, rf.currentTerm, rf.votedFor)
+		if rf.currentTerm > term && rf.votedFor != -1 {
+			fmt.Printf("      server %d election for term %d failed. currentTerm = %d. votedFor = %d\n", rf.me, args.Term, rf.currentTerm, rf.votedFor)
+			rf.myElectionStarted = false
 			rf.mu.Unlock()
 			return false
 		}
@@ -672,13 +729,18 @@ func (rf *Raft) startElection(term int) bool {
 				rf.matchIndex[i] = 0
 			}
 
+			rf.myElectionStarted = false
 			rf.mu.Unlock()
 			return true
 		}
 		rf.mu.Unlock()
 	}
 
-	fmt.Printf("server %d election timeout for term %d.\n", rf.me, args.Term)
+	rf.mu.Lock()
+	fmt.Printf("server %d election timeout for term %d.\n", rf.me, term)
+	rf.myElectionStarted = false
+	rf.mu.Unlock()
+
 	return false
 }
 
@@ -754,6 +816,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// Volatile state on leaders
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
+
+	// for election
+	rf.myElectionStarted = false
 
 	rand.Seed(time.Now().UnixNano())
 	rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
