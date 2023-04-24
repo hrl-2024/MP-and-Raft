@@ -26,6 +26,9 @@ import (
 	"sync/atomic"
 	"time"
 
+	"bytes"
+
+	"cs350/labgob"
 	"cs350/labrpc"
 )
 
@@ -122,13 +125,16 @@ func (rf *Raft) GetState() (int, bool) {
 // see paper's Figure 2 for a description of what should be persistent.
 func (rf *Raft) persist() {
 	// Your code here (2C).
-	// Example:
-	// w := new(bytes.Buffer)
-	// e := labgob.NewEncoder(w)
-	// e.Encode(rf.xxx)
-	// e.Encode(rf.yyy)
-	// data := w.Bytes()
-	// rf.persister.SaveRaftState(data)
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.votedFor)
+	e.Encode(rf.log)
+
+	data := w.Bytes()
+	rf.persister.SaveRaftState(data)
+
+	// fmt.Printf("                                                                    persist: saving state for server %d\n", rf.me)
 }
 
 // restore previously persisted state.
@@ -137,18 +143,23 @@ func (rf *Raft) readPersist(data []byte) {
 		return
 	}
 	// Your code here (2C).
-	// Example:
-	// r := bytes.NewBuffer(data)
-	// d := labgob.NewDecoder(r)
-	// var xxx
-	// var yyy
-	// if d.Decode(&xxx) != nil ||
-	//    d.Decode(&yyy) != nil {
-	//   error...
-	// } else {
-	//   rf.xxx = xxx
-	//   rf.yyy = yyy
-	// }
+	r := bytes.NewBuffer(data)
+	d := labgob.NewDecoder(r)
+	var currentTerm int
+	var votedFor int
+	var log []logEntryWithTerm
+	if d.Decode(&currentTerm) != nil || d.Decode(&votedFor) != nil || d.Decode(&log) != nil {
+		logger.Fatal("                                                                    readPersist: decode error")
+	} else {
+		fmt.Printf("                                                                    readPersist:---------restoring server %d stats\n", rf.me)
+		fmt.Printf("                                                                                         currentTerm = %d votedFor = %d log = %v\n", currentTerm, votedFor, log)
+		rf.currentTerm = currentTerm
+		rf.votedFor = votedFor
+		rf.log = log
+		fmt.Printf("                                                                                         rf: currentTerm = %d votedFor = %d log = %v\n", rf.currentTerm, rf.votedFor, rf.log)
+		rf.persist()
+		rf.timeLastOperation = time.Now()
+	}
 }
 
 // A service wants to switch to snapshot.  Only do so if Raft hasn't
@@ -215,6 +226,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.currentTerm = args.Term
 		rf.votedFor = args.CandidateId
 		rf.timeLastOperation = time.Now()
+		rf.persist()
 		return
 	}
 
@@ -246,6 +258,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: self log empty\n", rf.me, args.CandidateId)
 
+		rf.persist()
+
 		return
 	} else if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
 		// grant vote if candidate's log is at least as up-to-date as receiver's log
@@ -261,6 +275,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: candidate's term is bigger.\n", rf.me, args.CandidateId)
 
+		rf.persist()
+
 		return
 	} else if args.LastLogTerm == rf.log[len(rf.log)-1].Term && args.LastLogIndex+1 > len(rf.log)-1 {
 		rf.timeLastOperation = time.Now()
@@ -274,11 +290,14 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
 		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: same term, but candidate's log is more up-to-dated.\n", rf.me, args.CandidateId)
+
+		rf.persist()
 		return
 	} else {
 		rf.currentTerm = max(rf.currentTerm, args.Term)
 		reply.VoteGranted = false
 		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
+		rf.persist()
 		return
 	}
 }
@@ -332,14 +351,15 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 			return ok
 		}
 
-		if !reply.FailDueToElection {
+		if !reply.FailDueToElection && reply.LeaderId != rf.me {
 			rf.mu.Lock()
 			fmt.Printf("sendRequestVote: Server %d denied %d for term %d. And failed not because of election \n", server, args.CandidateId, args.Term)
 			rf.currentTerm = max(rf.currentTerm, reply.Term)
 			rf.votedFor = reply.LeaderId
 			rf.timeLastOperation = time.Now()
+			rf.persist()
 			rf.mu.Unlock()
-		} else {
+		} else if reply.FailDueToElection {
 			// fmt.Printf("sendRequestVote: %d(%d) Server %d is busy with its election. Retry \n", args.CandidateId, args.Term, server)
 			rf.sendRequestVote(server, args, reply)
 		}
@@ -361,6 +381,9 @@ type AppendEntriesReply struct {
 	Term     int  // currentTerm, for leader to update itself
 	LeaderId int  // the actual leader id for the upper term, for candidate to update itself
 	Success  bool // true if follower contained entry matching prevLogIndex and PrevLogTerm
+
+	ConflictingTerm      int // the term of the conflicting entry
+	FirstIndexForArgTerm int // first index of the conflicting entry term
 }
 
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
@@ -381,6 +404,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		fmt.Printf("    AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
 		rf.timeLastOperation = time.Now()
 		rf.votedFor = args.LeaderId
+		rf.persist()
 		return
 	}
 
@@ -393,25 +417,38 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		return
 	}
 
-	// if args.LeaderId != rf.votedFor {
-	// 	reply.Success = false
-	// 	fmt.Printf("AppendEntries from %d: server %d denied server %d. Not my leader.\n", args.LeaderId, rf.me, args.LeaderId)
-	// 	return
-	// }
+	if args.LeaderId != rf.votedFor {
+		reply.Success = false
+		fmt.Printf("AppendEntries from %d: server %d denied server %d. Not my leader.\n", args.LeaderId, rf.me, args.LeaderId)
+		return
+	}
 
 	rf.timeLastOperation = time.Now()
 
 	// 2. Reply false if log doesn't contain an entry at prevLogIndex ...
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
+
+		// find the reply.FirstIndexForArgTerm
+		reply.FirstIndexForArgTerm = len(rf.log) - 1
+
+		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
 	// 2.1 ... whose term matches prevLogTerm
 	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex].Term != args.PrevLogTerm {
 		reply.Success = false
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.1.\n                 PrevLogIndex = %d. rf.log = %v\n", args.LeaderId, rf.me, args.LeaderId, args.PrevLogIndex, rf.log)
+
+		reply.ConflictingTerm = rf.log[args.PrevLogIndex].Term
+		// find the reply.FirstIndexForArgTerm
+		i := args.PrevLogIndex
+		for rf.log[i].Term == reply.ConflictingTerm {
+			i--
+		}
+		reply.FirstIndexForArgTerm = i + 1
+
+		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.1.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
@@ -424,6 +461,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	rf.log = append(rf.log, args.Entries...)
 	fmt.Printf("    AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
+	rf.persist()
 
 	reply.Success = true
 
@@ -498,12 +536,15 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
 			rf.timeLastOperation = time.Now()
+			rf.persist()
 			rf.mu.Unlock()
 			return ok
 		}
 
-		if rf.nextIndex[server] > 1 {
-			rf.nextIndex[server] -= 1
+		if rf.nextIndex[server] > 1 && reply.FirstIndexForArgTerm != 0 {
+			rf.nextIndex[server] = reply.FirstIndexForArgTerm
+		} else if rf.nextIndex[server] > 1 {
+			rf.nextIndex[server]--
 		}
 
 		rf.mu.Unlock()
@@ -543,6 +584,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		Term:    term,
 	}
 	rf.log = append(rf.log, newLog)
+	rf.persist()
 
 	return index, term, isLeader
 }
@@ -655,6 +697,7 @@ func (rf *Raft) ticker() {
 				fmt.Printf("Server %d timed out.\n", rf.me)
 				// if timeout, become candiate
 				rf.votedFor = -1
+				rf.persist()
 			}
 			rf.mu.Unlock()
 		}
@@ -730,6 +773,7 @@ func (rf *Raft) startElection(term int) bool {
 			}
 
 			rf.myElectionStarted = false
+			rf.persist()
 			rf.mu.Unlock()
 			return true
 		}
@@ -842,6 +886,11 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	for i, _ := range rf.nextIndex {
 		rf.nextIndex[i] = len(rf.log)
+	}
+
+	if rf.me == rf.votedFor {
+		rf.votedFor = -1
+		rf.persist()
 	}
 
 	// start ticker goroutine to start elections
