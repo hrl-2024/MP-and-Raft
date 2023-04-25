@@ -104,16 +104,22 @@ func TestManyElections2A(t *testing.T) {
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
 		cfg.disconnect(i1)
+		fmt.Printf("Test: %d disconnected\n", i1)
 		cfg.disconnect(i2)
+		fmt.Printf("Test: %d disconnected\n", i2)
 		cfg.disconnect(i3)
+		fmt.Printf("Test: %d disconnected\n", i3)
 
 		// either the current leader should still be alive,
 		// or the remaining four should elect a new one.
 		cfg.checkOneLeader()
 
 		cfg.connect(i1)
+		fmt.Printf("Test: %d reconnected\n", i1)
 		cfg.connect(i2)
+		fmt.Printf("Test: %d reconnected\n", i2)
 		cfg.connect(i3)
+		fmt.Printf("Test: %d reconnected\n", i3)
 	}
 
 	cfg.checkOneLeader()
@@ -586,6 +592,109 @@ loop:
 	cfg.end()
 }
 
+// func TestRLBackup2BLowLog(t *testing.T) {
+// 	servers := 5
+// 	cfg := make_config(t, servers, false, false)
+// 	defer cfg.cleanup()
+
+// 	cfg.begin("Test (2B): leader backs up quickly over incorrect follower logs. LowLog")
+
+// 	cfg.one(1, servers, true)
+
+// 	// put leader and one follower in a partition
+// 	leader1 := cfg.checkOneLeader()
+// 	fmt.Printf("Test: server %d is leader 1.\n", leader1)
+// 	cfg.disconnect((leader1 + 2) % servers)
+// 	fmt.Printf("Test: %d disconnceted.\n", (leader1+2)%servers)
+// 	cfg.disconnect((leader1 + 3) % servers)
+// 	fmt.Printf("Test: %d disconnceted.\n", (leader1+3)%servers)
+// 	cfg.disconnect((leader1 + 4) % servers)
+// 	fmt.Printf("Test: %d disconnceted.\n", (leader1+4)%servers)
+
+// 	// submit lots of commands that won't commit
+// 	for i := 0; i < 2; i++ {
+// 		cfg.rafts[leader1].Start(rand.Int())
+// 	}
+
+// 	time.Sleep(RaftElectionTimeout / 2)
+
+// 	cfg.disconnect((leader1 + 0) % servers)
+// 	fmt.Printf("Test: %d disconnected.\n", (leader1+0)%servers)
+// 	cfg.disconnect((leader1 + 1) % servers)
+// 	fmt.Printf("Test: %d disconnected.\n", (leader1+1)%servers)
+
+// 	// allow other partition to recover
+// 	cfg.connect((leader1 + 2) % servers)
+// 	fmt.Printf("Test: %d reconnceted.\n", (leader1+2)%servers)
+// 	cfg.connect((leader1 + 3) % servers)
+// 	fmt.Printf("Test: %d reconnceted.\n", (leader1+3)%servers)
+// 	cfg.connect((leader1 + 4) % servers)
+// 	fmt.Printf("Test: %d reconnceted.\n", (leader1+4)%servers)
+
+// 	// lots of successful commands to new group.
+// 	for i := 2; i < 4; i++ {
+// 		cfg.one(i, 3, true)
+// 	}
+
+// 	fmt.Printf("Server %d %d %d should have 4 successful commands.\n", (leader1+2)%servers, (leader1+3)%servers, (leader1+4)%servers)
+
+// 	// now another partitioned leader and one follower
+// 	leader2 := cfg.checkOneLeader()
+// 	fmt.Printf("Test: server %d is leader 2.\n", leader2)
+// 	other := (leader1 + 2) % servers
+// 	if leader2 == other {
+// 		other = (leader2 + 1) % servers
+// 	}
+// 	cfg.disconnect(other)
+// 	fmt.Printf("Test: %d(other) disconnected.\n", other)
+
+// 	// lots more commands that won't commit
+// 	for i := 0; i < 2; i++ {
+// 		cfg.rafts[leader2].Start(rand.Int())
+// 	}
+
+// 	time.Sleep(RaftElectionTimeout / 2)
+
+// 	// bring original leader back to life,
+// 	fmt.Println("Test: disconnting all server.")
+// 	for i := 0; i < servers; i++ {
+// 		cfg.disconnect(i)
+// 	}
+// 	cfg.connect((leader1 + 0) % servers)
+// 	fmt.Printf("Test: %d reconncted.\n", (leader1+0)%servers)
+// 	cfg.connect((leader1 + 1) % servers)
+// 	fmt.Printf("Test: %d reconncted.\n", (leader1+1)%servers)
+// 	cfg.connect(other)
+// 	fmt.Printf("Test: %d reconncted.\n", other)
+
+// 	fmt.Printf("Check %d's log. Should be clean.\n", other)
+
+// 	leader3 := cfg.checkOneLeader()
+// 	if leader3 != other {
+// 		log.Fatalf("Other %d is not the leader. But sever %d is.", other, leader3)
+// 	}
+
+// 	// lots of successful commands to new group.
+// 	for i := 52; i < 54; i++ {
+// 		cfg.one(i, 3, true)
+// 	}
+
+// 	fmt.Printf("Check %d's log. should have 5 clean log\n", other)
+
+// 	// now everyone
+// 	for i := 0; i < servers; i++ {
+// 		cfg.connect(i)
+// 	}
+
+// 	fmt.Println("Test: everyone reconnected")
+
+// 	cfg.one(102, servers, true)
+
+// 	fmt.Println("Check everone's log. should have 6 clean log")
+
+// 	cfg.end()
+// }
+
 func TestPersist12C(t *testing.T) {
 	servers := 3
 	cfg := make_config(t, servers, false, false)
@@ -833,6 +942,7 @@ func TestFigure8Unreliable2C(t *testing.T) {
 
 		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
 			cfg.disconnect(leader)
+			fmt.Printf("Test: Server %d disconnected.\n", leader)
 			nup -= 1
 		}
 
@@ -840,6 +950,7 @@ func TestFigure8Unreliable2C(t *testing.T) {
 			s := rand.Int() % servers
 			if cfg.connected[s] == false {
 				cfg.connect(s)
+				fmt.Printf("Test: Server %d reconnected.\n", s)
 				nup += 1
 			}
 		}
@@ -848,6 +959,7 @@ func TestFigure8Unreliable2C(t *testing.T) {
 	for i := 0; i < servers; i++ {
 		if cfg.connected[i] == false {
 			cfg.connect(i)
+			fmt.Printf("Test: Server %d reconnected.\n", i)
 		}
 	}
 

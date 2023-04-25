@@ -347,9 +347,14 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 			rf.timeLastOperation = time.Now()
 			rf.persist()
 		}
-		rf.mu.Unlock()
-
 		fmt.Printf("sendRequestVote: server %d (term = %d, Leader = %d) rejected server %d.\n", server, reply.Term, reply.LeaderId, args.CandidateId)
+		if reply.Term >= rf.currentTerm && reply.LeaderId == -1 {
+			rf.currentTerm = reply.Term
+			rf.votedFor = server
+			rf.myElectionStarted = false
+		}
+
+		rf.mu.Unlock()
 	}
 
 	return ok
@@ -415,6 +420,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	// 2. Reply false if log doesn't contain an entry at prevLogIndex ...
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
+
+		reply.FirstIndexForArgTerm = len(rf.log) - 1
 
 		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
@@ -665,7 +672,7 @@ func (rf *Raft) ticker() {
 					logIndexToSent := nextIndexCopy[peer_index]
 					// fmt.Printf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
 					if len(logCopy) > 1 && logIndexToSent < len(logCopy) {
-						args.Entries = []logEntryWithTerm{logCopy[logIndexToSent]}
+						args.Entries = logCopy[logIndexToSent:]
 					}
 
 					go rf.sendAppendEntries(peer_index, &args, &reply)
@@ -736,7 +743,7 @@ func (rf *Raft) startElection(term int) bool {
 
 	for time.Now().Before(deadline) {
 		rf.mu.Lock()
-		if rf.currentTerm > term && rf.votedFor != -1 {
+		if (rf.currentTerm > term && rf.votedFor != -1) || !rf.myElectionStarted {
 			fmt.Printf("      server %d election for term %d failed. currentTerm = %d. votedFor = %d\n", rf.me, args.Term, rf.currentTerm, rf.votedFor)
 			rf.myElectionStarted = false
 			rf.mu.Unlock()

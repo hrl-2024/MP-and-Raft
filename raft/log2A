@@ -1,0 +1,2929 @@
+Test (2A): initial election ...
+Server 0 started election for term 1.
+RequestVote: server 2 grant vote to server 0. Reason: same term, log index is at least uptodate 
+RequestVote: server 1 grant vote to server 0. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 0 received vote for term 1 from 2
+server 0 is now the leader for term 1.
+          server 0 has log: [{<nil> 0}] 
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+  ... Passed --   3.1  3   78   23866    0
+Test (2A): election after network failure ...
+Server 0 started election for term 1.
+RequestVote: server 2 grant vote to server 0. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 0 received vote for term 1 from 2
+server 0 is now the leader for term 1.
+          server 0 has log: [{<nil> 0}] 
+RequestVote: server 1 grant vote to server 0. Reason: same term, log index is at least uptodate 
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Server 2 timed out.
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Server 2 started election for term 2.
+RequestVote: server 1 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 2 received vote for term 2 from 1
+server 2 is now the leader for term 2.
+          server 2 has log: [{<nil> 0}] 
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 0 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1] 
+    AppendEntries from 0: server 2 denied server 0. Reason: 1.
+    AppendEntries from 0: server 1 denied server 0. Reason: 1.
+sendAppendEntries: candidate 2's term is higher than mine (0).
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 timed out.
+Server 0 timed out.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 started election for term 3.
+Server 0 started election for term 3.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 1 election timeout for term 3.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 started election for term 4.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 0 election timeout for term 3.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 0 started election for term 4.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+server 1 election timeout for term 4.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 started election for term 5.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+server 0 election timeout for term 4.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 0 started election for term 5.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 1 election timeout for term 5.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 started election for term 6.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 0 election timeout for term 5.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 0 started election for term 6.
+server 1 election timeout for term 6.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+Server 1 started election for term 7.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 0 election timeout for term 6.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 1 election timeout for term 7.
+Server 0 started election for term 7.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 1 started election for term 8.
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+server 0 election timeout for term 7.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Server 0 started election for term 8.
+server 1 election timeout for term 8.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Server 1 started election for term 9.
+RequestVote: server 0 grant vote to server 1. Reason: same term, log index is at least uptodate 
+      server 0 election for term 8 failed. currentTerm = 9. votedFor = 1
+sendRequestVote: Server 1 received vote for term 9 from 0
+server 1 is now the leader for term 9.
+          server 1 has log: [{<nil> 0}] 
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 2 is leader for term 2. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1] 
+    AppendEntries from 2: server 0 denied server 2. Reason: 1.
+    AppendEntries from 2: server 1 denied server 2. Reason: 1.
+sendAppendEntries: candidate 0's term is higher than mine (2).
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+Ticker: server 1 is leader for term 9. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0]
+  ... Passed --   4.5  3  162   33992    0
+Test (2A): multiple elections ...
+Server 1 started election for term 1.
+RequestVote: server 6 grant vote to server 1. Reason: same term, log index is at least uptodate 
+RequestVote: server 2 grant vote to server 1. Reason: same term, log index is at least uptodate 
+RequestVote: server 4 grant vote to server 1. Reason: same term, log index is at least uptodate 
+RequestVote: server 5 grant vote to server 1. Reason: same term, log index is at least uptodate 
+RequestVote: server 3 grant vote to server 1. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 1 received vote for term 1 from 4
+RequestVote: server 0 grant vote to server 1. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 1 received vote for term 1 from 3
+sendRequestVote: Server 1 received vote for term 1 from 5
+server 1 is now the leader for term 1.
+          server 1 has log: [{<nil> 0}] 
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 2 deleting log after log[0] 
+    AppendEntries from 1: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 0 deleting log after log[0] 
+    AppendEntries from 1: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Test: 0 disconnected
+Test: 0 disconnected
+Test: 2 disconnected
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Server 0 timed out.
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Server 0 started election for term 2.
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+Server 2 timed out.
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+Server 2 started election for term 2.
+sendRequestVote: Server 2 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 3 deleting log after log[0] 
+    AppendEntries from 1: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 4 deleting log after log[0] 
+    AppendEntries from 1: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 4's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+server 0 election timeout for term 2.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+Test: 0 reconnected
+Test: 0 reconnected
+Test: 2 reconnected
+Test: 3 disconnected
+Test: 4 disconnected
+Test: 3 disconnected
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+Ticker: server 1 is leader for term 1. Sending AppendEntryRPC. --------------------
+        leader server 1 log: [{<nil> 0}] 
+        leader server 1 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 1: server 0 denied server 1. Reason: 1.
+    AppendEntries from 1: server 6 deleting log after log[0] 
+    AppendEntries from 1: server 5 deleting log after log[0] 
+    AppendEntries from 1: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 2 in election. Gotta wait. 
+    AppendEntries from 1: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 1: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 1: server 6's current log: [{<nil> 0}] 
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 1 commitIndex = 0 
+                1 matchIndex = [0 0 0 0 0 0 0]
+Server 0 started election for term 3.
+RequestVote: server 6 grant vote to server 0. Reason: same term, log index is at least uptodate 
+RequestVote: server 5 grant vote to server 0. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 0 received vote for term 3 from 6
+sendRequestVote: Server 0 received vote for term 3 from 5
+RequestVote: server 1 step down by server 0.
+RequestVote: server 2 grant vote to server 0. Reason: same term, log index is at least uptodate 
+      server 2 election for term 2 failed. currentTerm = 3. votedFor = 0
+sendRequestVote: server 1 (term = 0, Leader = 0) rejected server 0.
+sendRequestVote: Server 0 received vote for term 3 from 2
+server 0 is now the leader for term 3.
+          server 0 has log: [{<nil> 0}] 
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 5 deleting log after log[0] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+Server 3 timed out.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+Server 4 timed out.
+    AppendEntries from 0: server 5 deleting log after log[0] 
+    AppendEntries from 0: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+Server 3 started election for term 2.
+sendRequestVote: Server 3 Call("Raft6.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+Server 4 started election for term 2.
+    AppendEntries from 0: server 5 deleting log after log[0] 
+    AppendEntries from 0: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 4 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 5 deleting log after log[0] 
+    AppendEntries from 0: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft5.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 2 deleting log after log[0] 
+    AppendEntries from 0: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 2's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 5 deleting log after log[0] 
+    AppendEntries from 0: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 5's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+server 3 election timeout for term 2.
+server 4 election timeout for term 2.
+Test: 3 reconnected
+Test: 4 reconnected
+Test: 3 reconnected
+Test: 5 disconnected
+Test: 3 disconnected
+Test: 2 disconnected
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 4 convert back to follower. Term = 3 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+Server 3 started election for term 3.
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+Server 5 timed out.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+Server 5 started election for term 4.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+Server 2 timed out.
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+Server 2 started election for term 4.
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+server 3 election timeout for term 3.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 6 deleting log after log[0] 
+    AppendEntries from 0: server 6 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 6's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+server 5 election timeout for term 4.
+Server 3 started election for term 4.
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+Test: 5 reconnected
+Test: 3 reconnected
+Test: 2 reconnected
+Test: 5 disconnected
+Test: 3 disconnected
+Test: 6 disconnected
+sendRequestVote: Server 3 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 0: server 2 in election. Gotta wait. 
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+Server 5 started election for term 5.
+sendRequestVote: Server 3 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+server 2 election timeout for term 4.
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+Ticker: server 0 is leader for term 3. Sending AppendEntryRPC. --------------------
+        leader server 0 log: [{<nil> 0}] 
+        leader server 0 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 0: server 2 denied server 0. Reason: 1.
+    AppendEntries from 0: server 4 deleting log after log[0] 
+    AppendEntries from 0: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 1 deleting log after log[0] 
+    AppendEntries from 0: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 0: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 0: server 1's current log: [{<nil> 0}] 
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 0 commitIndex = 0 
+                0 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+server 3 election timeout for term 4.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+Server 2 started election for term 5.
+RequestVote: server 1 grant vote to server 2. Reason: same term, log index is at least uptodate 
+RequestVote: server 4 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 2 received vote for term 5 from 4
+RequestVote: server 0 step down by server 2.
+sendRequestVote: Server 2 received vote for term 5 from 1
+sendRequestVote: server 0 (term = 0, Leader = 0) rejected server 2.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+Server 6 timed out.
+Server 3 started election for term 5.
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft1.RequestVote") failed.
+server 5 election timeout for term 5.
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+Server 6 started election for term 4.
+sendRequestVote: Server 6 Call("Raft0.RequestVote") failed.
+Server 5 started election for term 6.
+sendRequestVote: Server 6 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft3.RequestVote") failed.
+server 2 election timeout for term 5.
+sendRequestVote: Server 6 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+server 3 election timeout for term 5.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+Server 4 timed out.
+Server 1 timed out.
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+Server 2 started election for term 6.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+Server 0 timed out.
+RequestVote: server 1 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 2 received vote for term 6 from 1
+RequestVote: server 0 grant vote to server 2. Reason: same term, log index is at least uptodate 
+RequestVote: server 4 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 2 received vote for term 6 from 4
+sendRequestVote: Server 2 received vote for term 6 from 0
+server 2 is now the leader for term 6.
+          server 2 has log: [{<nil> 0}] 
+Server 3 started election for term 6.
+sendRequestVote: Server 3 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4 deleting log after log[0] 
+    AppendEntries from 2: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+Test: 5 reconnected
+Test: 3 reconnected
+Test: 6 reconnected
+Test: 2 disconnected
+Test: 5 disconnected
+Test: 0 disconnected
+server 6 election timeout for term 4.
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+server 5 election timeout for term 6.
+Server 6 started election for term 5.
+RequestVote: server 4 rejected server 6. Reason: candidate's term <= mine.
+RequestVote: server 1 rejected server 6. Reason: candidate's term <= mine.
+RequestVote: server 3 rejected server 6. Reason: candidate's term <= mine.
+sendRequestVote: server 6 convert back to follower. Now, term = 6. Leader = 2
+sendRequestVote: server 4 (term = 6, Leader = 2) rejected server 6.
+      server 6 election for term 5 failed. currentTerm = 6. votedFor = 2
+sendRequestVote: server 1 (term = 6, Leader = 2) rejected server 6.
+sendRequestVote: server 3 (term = 6, Leader = -1) rejected server 6.
+server 3 election timeout for term 6.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 6 Call("Raft2.RequestVote") failed.
+Server 5 started election for term 7.
+sendRequestVote: Server 6 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+Server 3 started election for term 7.
+RequestVote: server 4 grant vote to server 3. Reason: same term, log index is at least uptodate 
+RequestVote: server 1 grant vote to server 3. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 3 received vote for term 7 from 4
+RequestVote: server 6 grant vote to server 3. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 3 received vote for term 7 from 1
+sendRequestVote: Server 3 received vote for term 7 from 6
+server 3 is now the leader for term 7.
+          server 3 has log: [{<nil> 0}] 
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft5.RequestVote") failed.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 3 Call("Raft2.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 0 timed out.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+server 5 election timeout for term 7.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 0 started election for term 7.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+Server 5 started election for term 8.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 2 is leader for term 6. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+Test: 2 reconnected
+Test: 5 reconnected
+Test: 0 reconnected
+Test: 5 disconnected
+Test: 0 disconnected
+Test: 1 disconnected
+server 0 election timeout for term 7.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 2 convert back to follower. Term = 7 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 0 started election for term 8.
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+server 5 election timeout for term 8.
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+Server 5 started election for term 9.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 1 timed out.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft1.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 1 started election for term 8.
+sendRequestVote: Server 1 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 1 Call("Raft5.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 1 Call("Raft2.RequestVote") failed.
+server 0 election timeout for term 8.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+server 5 election timeout for term 9.
+Server 0 started election for term 9.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+Test: 5 reconnected
+Test: 0 reconnected
+Test: 1 reconnected
+Test: 0 disconnected
+Test: 2 disconnected
+Test: 4 disconnected
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+Ticker: server 3 is leader for term 7. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 in election. Gotta wait. 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 5 denied server 3. Reason: 1.
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+server 1 election timeout for term 8.
+Server 5 started election for term 10.
+RequestVote: server 3 step down by server 5.
+RequestVote: server 1 grant vote to server 5. Reason: same term, log index is at least uptodate 
+sendRequestVote: server 3 (term = 0, Leader = 0) rejected server 5.
+sendRequestVote: Server 5 received vote for term 10 from 1
+RequestVote: server 6 grant vote to server 5. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 5 received vote for term 10 from 6
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+Server 2 timed out.
+server 0 election timeout for term 9.
+Server 4 timed out.
+Server 2 started election for term 8.
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+Server 0 started election for term 10.
+server 5 election timeout for term 10.
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+Server 6 timed out.
+Server 1 timed out.
+Server 4 started election for term 8.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+Server 5 started election for term 11.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft0.RequestVote") failed.
+RequestVote: server 1 grant vote to server 5. Reason: same term, log index is at least uptodate 
+RequestVote: server 6 grant vote to server 5. Reason: same term, log index is at least uptodate 
+RequestVote: server 3 grant vote to server 5. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 4 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 5 received vote for term 11 from 1
+sendRequestVote: Server 5 received vote for term 11 from 3
+sendRequestVote: Server 5 received vote for term 11 from 6
+server 5 is now the leader for term 11.
+          server 5 has log: [{<nil> 0}] 
+sendRequestVote: Server 4 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 5 Call("Raft4.RequestVote") failed.
+server 0 election timeout for term 10.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 5: server 1 deleting log after log[0] 
+    AppendEntries from 5: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 5: server 6 deleting log after log[0] 
+    AppendEntries from 5: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 5: server 3 deleting log after log[0] 
+    AppendEntries from 5: server 3 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 5: server 3's current log: [{<nil> 0}] 
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+Server 0 started election for term 11.
+sendRequestVote: Server 0 Call("Raft2.RequestVote") failed.
+server 2 election timeout for term 8.
+sendRequestVote: Server 0 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 0 Call("Raft6.RequestVote") failed.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 5: server 3 deleting log after log[0] 
+    AppendEntries from 5: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 5: server 1 deleting log after log[0] 
+    AppendEntries from 5: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 1's current log: [{<nil> 0}] 
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 5: server 6 deleting log after log[0] 
+    AppendEntries from 5: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 6's current log: [{<nil> 0}] 
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 5 commitIndex = 0 
+                5 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 0 Call("Raft1.RequestVote") failed.
+server 4 election timeout for term 8.
+Server 2 started election for term 9.
+sendRequestVote: Server 0 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+Test: 0 reconnected
+Test: 2 reconnected
+Test: 4 reconnected
+Test: 5 disconnected
+Test: 5 disconnected
+Test: 4 disconnected
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+Server 4 started election for term 9.
+sendRequestVote: Server 4 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+sendRequestVote: Server 4 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft0.RequestVote") failed.
+server 2 election timeout for term 9.
+sendRequestVote: Server 4 Call("Raft5.RequestVote") failed.
+Server 3 timed out.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+server 0 election timeout for term 11.
+Server 2 started election for term 10.
+RequestVote: server 1 rejected server 2. Reason: candidate's term <= mine.
+RequestVote: server 3 rejected server 2. Reason: candidate's term <= mine.
+RequestVote: server 6 rejected server 2. Reason: candidate's term <= mine.
+RequestVote: server 0 rejected server 2. Reason: candidate's term <= mine.
+sendRequestVote: server 2 convert back to follower. Now, term = 11. Leader = 5
+sendRequestVote: server 1 (term = 11, Leader = 5) rejected server 2.
+      server 2 election for term 10 failed. currentTerm = 11. votedFor = 5
+sendRequestVote: server 3 (term = 11, Leader = -1) rejected server 2.
+sendRequestVote: server 6 (term = 11, Leader = 5) rejected server 2.
+sendRequestVote: server 0 (term = 11, Leader = -1) rejected server 2.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+server 4 election timeout for term 9.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+Server 3 started election for term 12.
+        leader server 5 log: [{<nil> 0}] 
+Server 1 timed out.
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+RequestVote: server 1 grant vote to server 3. Reason: same term, log index is at least uptodate 
+RequestVote: server 2 grant vote to server 3. Reason: same term, log index is at least uptodate 
+RequestVote: server 0 grant vote to server 3. Reason: same term, log index is at least uptodate 
+RequestVote: server 6 grant vote to server 3. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 3 received vote for term 12 from 1
+sendRequestVote: Server 3 received vote for term 12 from 0
+sendRequestVote: Server 3 received vote for term 12 from 6
+server 3 is now the leader for term 12.
+          server 3 has log: [{<nil> 0}] 
+sendRequestVote: Server 3 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+Server 4 started election for term 10.
+sendRequestVote: Server 3 Call("Raft5.RequestVote") failed.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 4 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft0.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft5.RequestVote") failed.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 5 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 2 deleting log after log[0] 
+    AppendEntries from 3: server 2 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 2's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 4 Call("Raft2.RequestVote") failed.
+Ticker: server 5 is leader for term 11. Sending AppendEntryRPC. --------------------
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 5 log: [{<nil> 0}] 
+        leader server 3 log: [{<nil> 0}] 
+        leader server 5 nextIndex: [1 1 1 1 1 1 1] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+Test: 5 reconnected
+Test: 5 reconnected
+Test: 4 reconnected
+Test: 2 disconnected
+Test: 6 disconnected
+Test: 2 disconnected
+    AppendEntries from 3: server 6 deleting log after log[0] 
+    AppendEntries from 3: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 1 denied server 5. Reason: 1.
+    AppendEntries from 3: server 6's current log: [{<nil> 0}] 
+server 4 election timeout for term 10.
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+sendAppendEntries: candidate 1's term is higher than mine (5).
+    AppendEntries from 5: server 0 denied server 5. Reason: 1.
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 5: server 3 denied server 5. Reason: 1.
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+Server 4 started election for term 11.
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+RequestVote: server 1 rejected server 4. Reason: candidate's term <= mine.
+RequestVote: server 3 rejected server 4. Reason: candidate's term <= mine.
+sendRequestVote: server 4 convert back to follower. Now, term = 12. Leader = 3
+sendRequestVote: server 3 (term = 12, Leader = 3) rejected server 4.
+      server 4 election for term 11 failed. currentTerm = 12. votedFor = 3
+RequestVote: server 0 rejected server 4. Reason: candidate's term <= mine.
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+sendRequestVote: server 1 (term = 12, Leader = 3) rejected server 4.
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+sendRequestVote: server 0 (term = 12, Leader = 3) rejected server 4.
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+RequestVote: server 5 rejected server 4. Reason: candidate's term <= mine.
+sendRequestVote: server 5 (term = 12, Leader = 3) rejected server 4.
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 4 Call("Raft6.RequestVote") failed.
+sendRequestVote: Server 4 Call("Raft2.RequestVote") failed.
+Server 2 timed out.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 2 started election for term 13.
+sendRequestVote: Server 2 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft6.RequestVote") failed.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 2 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft4.RequestVote") failed.
+Server 6 timed out.
+sendRequestVote: Server 2 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 2 Call("Raft0.RequestVote") failed.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Server 6 started election for term 13.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+sendRequestVote: Server 6 Call("Raft2.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft3.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft4.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft1.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft5.RequestVote") failed.
+sendRequestVote: Server 6 Call("Raft0.RequestVote") failed.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+Test: 2 reconnected
+Test: 6 reconnected
+Test: 2 reconnected
+server 2 election timeout for term 13.
+Ticker: server 3 is leader for term 12. Sending AppendEntryRPC. --------------------
+        leader server 3 log: [{<nil> 0}] 
+        leader server 3 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 3: server 4 deleting log after log[0] 
+    AppendEntries from 3: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 1 deleting log after log[0] 
+    AppendEntries from 3: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 2 denied server 3. Reason: 1.
+    AppendEntries from 3: server 1's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 6 in election. Gotta wait. 
+    AppendEntries from 3: server 5 deleting log after log[0] 
+    AppendEntries from 3: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 3: server 0 deleting log after log[0] 
+    AppendEntries from 3: server 0 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 3: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 3: server 0's current log: [{<nil> 0}] 
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 3 commitIndex = 0 
+                3 matchIndex = [0 0 0 0 0 0 0]
+server 6 election timeout for term 13.
+Server 2 started election for term 14.
+RequestVote: server 3 step down by server 2.
+RequestVote: server 1 grant vote to server 2. Reason: same term, log index is at least uptodate 
+RequestVote: server 5 grant vote to server 2. Reason: same term, log index is at least uptodate 
+RequestVote: server 6 grant vote to server 2. Reason: same term, log index is at least uptodate 
+RequestVote: server 4 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: server 3 (term = 0, Leader = 0) rejected server 2.
+sendRequestVote: Server 2 received vote for term 14 from 5
+RequestVote: server 0 grant vote to server 2. Reason: same term, log index is at least uptodate 
+sendRequestVote: Server 2 received vote for term 14 from 4
+sendRequestVote: Server 2 received vote for term 14 from 6
+server 2 is now the leader for term 14.
+          server 2 has log: [{<nil> 0}] 
+Ticker: server 2 is leader for term 14. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 2: server 5 deleting log after log[0] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 6 deleting log after log[0] 
+    AppendEntries from 2: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4 deleting log after log[0] 
+    AppendEntries from 2: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 3 deleting log after log[0] 
+    AppendEntries from 2: server 3 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+    AppendEntries from 2: server 3's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4's current log: [{<nil> 0}] 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 2 is leader for term 14. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 4 deleting log after log[0] 
+    AppendEntries from 2: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 5 deleting log after log[0] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 3 deleting log after log[0] 
+    AppendEntries from 2: server 6 deleting log after log[0] 
+    AppendEntries from 2: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 6's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+    AppendEntries from 2: server 3 has appended log. 
+               [{<nil> 0}] 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 3's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 2 is leader for term 14. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 2: server 6 deleting log after log[0] 
+    AppendEntries from 2: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 3 deleting log after log[0] 
+    AppendEntries from 2: server 3 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 3's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 5 deleting log after log[0] 
+    AppendEntries from 2: server 5 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 5's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4 deleting log after log[0] 
+    AppendEntries from 2: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 4's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+Ticker: server 2 is leader for term 14. Sending AppendEntryRPC. --------------------
+        leader server 2 log: [{<nil> 0}] 
+        leader server 2 nextIndex: [1 1 1 1 1 1 1] 
+    AppendEntries from 2: server 0 deleting log after log[0] 
+    AppendEntries from 2: server 0 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 0's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 6 deleting log after log[0] 
+    AppendEntries from 2: server 6 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 6's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 4 deleting log after log[0] 
+    AppendEntries from 2: server 4 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 4's current log: [{<nil> 0}] 
+    AppendEntries from 2: server 3 deleting log after log[0] 
+    AppendEntries from 2: server 3 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 3's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 1 deleting log after log[0] 
+    AppendEntries from 2: server 1 has appended log. 
+               [{<nil> 0}] 
+    AppendEntries from 2: server 1's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 5 deleting log after log[0] 
+    AppendEntries from 2: server 5 has appended log. 
+               [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+    AppendEntries from 2: server 5's current log: [{<nil> 0}] 
+commit_checker: 2 commitIndex = 0 
+                2 matchIndex = [0 0 0 0 0 0 0]
+  ... Passed --   5.3  7  642  128366    0
+PASS
+ok  	cs350/raft	13.053s

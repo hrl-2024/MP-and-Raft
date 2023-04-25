@@ -600,7 +600,7 @@ func (cfg *config) one(cmd interface{}, expectedServers int, retry bool) int {
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
-	log.Fatalf("one(%v) failed to reach agreement", cmd)
+	log.Fatalf("one(%v) failed to reach agreement. 10 seconds timeout.", cmd)
 	return -1
 }
 
