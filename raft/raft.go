@@ -208,11 +208,11 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// fmt.Printf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
 
-	if args.Term < rf.currentTerm {
+	if args.Term <= rf.currentTerm {
 		reply.VoteGranted = false
 		reply.Term = rf.currentTerm
 		reply.LeaderId = rf.votedFor
-		fmt.Printf("RequestVote: server %d rejected server %d. Reason: candidate's term < mine.\n", rf.me, args.CandidateId)
+		fmt.Printf("RequestVote: server %d rejected server %d. Reason: candidate's term <= mine.\n", rf.me, args.CandidateId)
 		return
 	}
 
@@ -231,7 +231,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.currentTerm = args.Term
 		rf.votedFor = -1
 		rf.persist()
-		if (rf.votedFor == -1 || rf.votedFor == args.CandidateId) && !rf.myElectionStarted {
+		if rf.votedFor == -1 || rf.votedFor == args.CandidateId {
 			// if candidate's log is at least as updated as receiver's log, grant vote
 			if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
 				// If the logs have last entries with different terms, then the log with the later term is more up-to-date
@@ -313,6 +313,14 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // that the caller passes the address of the reply struct with &, not
 // the struct itself.
 func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
+
+	rf.mu.Lock()
+	if args.Term != rf.currentTerm && !rf.myElectionStarted {
+		rf.mu.Unlock()
+		return false
+	}
+	rf.mu.Unlock()
+
 	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
 
 	if !ok {
@@ -408,9 +416,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.PrevLogIndex > len(rf.log)-1 {
 		reply.Success = false
 
-		// find the reply.FirstIndexForArgTerm
-		reply.FirstIndexForArgTerm = len(rf.log) - 1
-
 		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason 2.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
@@ -501,6 +506,8 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 		rf.nextIndex[server] = args.PrevLogIndex + len(args.Entries) + 1
 		rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
 
+		fmt.Printf("sendAppendEntries: %d(%d): matchIndex for server %d is now %d. args.PrevLogIndex = %d\n", rf.me, rf.currentTerm, server, rf.matchIndex[server], args.PrevLogIndex)
+
 		rf.commit_checker()
 		rf.mu.Unlock()
 	} else {
@@ -521,9 +528,10 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 		}
 
 		if rf.nextIndex[server] > 1 && reply.FirstIndexForArgTerm != 0 {
+			fmt.Printf("sendAppendEntries: nextIndex for server %d decreased from %d to %d\n", server, rf.nextIndex[server], reply.FirstIndexForArgTerm)
 			rf.nextIndex[server] = reply.FirstIndexForArgTerm
 		} else if rf.nextIndex[server] > 1 {
-			rf.nextIndex[server]--
+			rf.nextIndex[server] = 1
 		}
 
 		rf.mu.Unlock()
@@ -855,7 +863,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// send out the dummy log for testing
 	applymessage := ApplyMsg{
 		CommandValid: true,
-		Command:      rf.log[0].Command,
+		Command:      0,
 		CommandIndex: 0,
 	}
 	rf.applyCh <- applymessage
