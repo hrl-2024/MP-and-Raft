@@ -208,16 +208,13 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// fmt.Printf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
 
-	if rf.myElectionStarted {
+	if args.Term < rf.currentTerm {
 		reply.VoteGranted = false
-		reply.FailDueToElection = true
-		// can't grant vote
+		reply.Term = rf.currentTerm
+		reply.LeaderId = rf.votedFor
+		fmt.Printf("RequestVote: server %d rejected server %d. Reason: candidate's term < mine.\n", rf.me, args.CandidateId)
 		return
 	}
-
-	reply.Term = rf.currentTerm
-	reply.LeaderId = rf.votedFor
-	reply.FailDueToElection = false
 
 	if args.Term > rf.currentTerm && rf.votedFor == rf.me {
 		// convert back to follower
@@ -230,75 +227,61 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	if args.Term <= rf.currentTerm {
-		reply.VoteGranted = false
-		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
-		return
-	}
-
-	// if there is a leader for current term already
-	if args.Term == rf.currentTerm && (rf.votedFor != -1 || rf.myElectionStarted) {
-		reply.VoteGranted = false
-		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
-		return
-	}
-
-	if len(rf.log) == 0 {
-		// fmt.Printf("RequestVote: server %d log is empty. \n", rf.me)
-		rf.timeLastOperation = time.Now()
-
-		// grant vote
-		reply.VoteGranted = true
-		rf.votedFor = args.CandidateId
+	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
-
-		// resets its election timeout
-		rand.Seed(time.Now().UnixNano())
-		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
-
-		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: self log empty\n", rf.me, args.CandidateId)
-
+		rf.votedFor = -1
 		rf.persist()
+		if (rf.votedFor == -1 || rf.votedFor == args.CandidateId) && !rf.myElectionStarted {
+			// if candidate's log is at least as updated as receiver's log, grant vote
+			if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
+				// If the logs have last entries with different terms, then the log with the later term is more up-to-date
+				rf.timeLastOperation = time.Now()
 
-		return
-	} else if args.LastLogTerm > rf.log[len(rf.log)-1].Term {
-		// grant vote if candidate's log is at least as up-to-date as receiver's log
-		rf.timeLastOperation = time.Now()
+				reply.VoteGranted = true
+				rf.votedFor = args.CandidateId
+				rf.currentTerm = args.Term
 
-		reply.VoteGranted = true
-		rf.votedFor = args.CandidateId
-		rf.currentTerm = args.Term
+				// resets its election timeout
+				rand.Seed(time.Now().UnixNano())
+				rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-		// resets its election timeout
-		rand.Seed(time.Now().UnixNano())
-		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
+				fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: Prev log term is bigger.\n", rf.me, args.CandidateId)
 
-		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: candidate's term is bigger.\n", rf.me, args.CandidateId)
+				rf.persist()
 
-		rf.persist()
+				return
+			}
+			if args.LastLogTerm == rf.log[len(rf.log)-1].Term {
+				if args.LastLogIndex >= len(rf.log)-1 {
+					rf.timeLastOperation = time.Now()
 
-		return
-	} else if args.LastLogTerm == rf.log[len(rf.log)-1].Term && args.LastLogIndex+1 > len(rf.log)-1 {
-		rf.timeLastOperation = time.Now()
+					reply.VoteGranted = true
+					rf.votedFor = args.CandidateId
+					rf.currentTerm = args.Term
 
-		reply.VoteGranted = true
-		rf.votedFor = args.CandidateId
-		rf.currentTerm = args.Term
+					// resets its election timeout
+					rand.Seed(time.Now().UnixNano())
+					rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-		// resets its election timeout
-		rand.Seed(time.Now().UnixNano())
-		rf.electionTimeout = rand.Intn(timeoutLowBound) + timeoutRange
+					fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: same term, log index is at least uptodate \n", rf.me, args.CandidateId)
 
-		fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: same term, but candidate's log is more up-to-dated.\n", rf.me, args.CandidateId)
-
-		rf.persist()
-		return
-	} else {
-		rf.currentTerm = max(rf.currentTerm, args.Term)
-		reply.VoteGranted = false
-		// fmt.Printf("RequestVote: server %d denied server %d.\n", rf.me, args.CandidateId)
-		rf.persist()
-		return
+					rf.persist()
+					return
+				} else {
+					reply.VoteGranted = false
+					reply.Term = rf.currentTerm
+					reply.LeaderId = rf.votedFor
+					fmt.Printf("RequestVote: server %d rejected server %d. Reason: same term, but index shorter\n", rf.me, args.CandidateId)
+					return
+				}
+			} else {
+				reply.VoteGranted = false
+				reply.Term = rf.currentTerm
+				reply.LeaderId = rf.votedFor
+				fmt.Printf("RequestVote: server %d rejected server %d. Reason: Log's term less. \n", rf.me, args.CandidateId)
+				return
+			}
+		}
 	}
 }
 
@@ -345,24 +328,20 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 		}
 		rf.mu.Unlock()
 	} else {
-		if !reply.FailDueToElection && reply.LeaderId == server {
-			// leader stepped down. Do nothing
-			fmt.Printf("sendRequestVote: %d(%d) - reply.LeaderId == server %d \n", args.CandidateId, args.Term, server)
-			return ok
-		}
-
-		if !reply.FailDueToElection && reply.LeaderId != rf.me {
-			rf.mu.Lock()
-			fmt.Printf("sendRequestVote: Server %d denied %d for term %d. And failed not because of election \n", server, args.CandidateId, args.Term)
-			rf.currentTerm = max(rf.currentTerm, reply.Term)
+		rf.mu.Lock()
+		if reply.Term > rf.currentTerm {
+			fmt.Printf("sendRequestVote: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
+			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
+			// resets its election timeout
+			rand.Seed(time.Now().UnixNano())
+			rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 			rf.timeLastOperation = time.Now()
 			rf.persist()
-			rf.mu.Unlock()
-		} else if reply.FailDueToElection {
-			// fmt.Printf("sendRequestVote: %d(%d) Server %d is busy with its election. Retry \n", args.CandidateId, args.Term, server)
-			rf.sendRequestVote(server, args, reply)
 		}
+		rf.mu.Unlock()
+
+		fmt.Printf("sendRequestVote: server %d (term = %d, Leader = %d) rejected server %d.\n", server, reply.Term, reply.LeaderId, args.CandidateId)
 	}
 
 	return ok
@@ -731,18 +710,11 @@ func (rf *Raft) startElection(term int) bool {
 		CandidateId: rf.me,
 	}
 
-	if len(rf.log) == 0 {
-		args.LastLogIndex = 0
-		args.LastLogTerm = 0
-	} else {
-		args.LastLogIndex = len(rf.log) - 1
-		args.LastLogTerm = rf.log[len(rf.log)-1].Term
-	}
+	args.LastLogIndex = len(rf.log) - 1
+	args.LastLogTerm = rf.log[len(rf.log)-1].Term
 
 	// get election timeout
 	deadline := rf.timeLastOperation.Add(time.Millisecond * time.Duration(rf.electionTimeout))
-
-	rf.mu.Unlock()
 
 	for peer_index, _ := range rf.peers {
 		if peer_index != rf.me {
@@ -751,6 +723,8 @@ func (rf *Raft) startElection(term int) bool {
 			go rf.sendRequestVote(peer_index, &args, &reply)
 		}
 	}
+
+	rf.mu.Unlock()
 
 	for time.Now().Before(deadline) {
 		rf.mu.Lock()
@@ -774,6 +748,11 @@ func (rf *Raft) startElection(term int) bool {
 
 			rf.myElectionStarted = false
 			rf.persist()
+
+			// resets its election timeout
+			rand.Seed(time.Now().UnixNano())
+			rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
+			rf.timeLastOperation = time.Now()
 			rf.mu.Unlock()
 			return true
 		}
