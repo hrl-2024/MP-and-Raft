@@ -352,6 +352,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 			rf.currentTerm = reply.Term
 			rf.votedFor = server
 			rf.myElectionStarted = false
+			rf.persist()
 		}
 
 		rf.mu.Unlock()
