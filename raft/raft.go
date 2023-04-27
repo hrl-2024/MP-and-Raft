@@ -880,7 +880,7 @@ func (rf *Raft) commit_checker() {
 				rf.commitIndex = i
 				applymessage := ApplyMsg{
 					CommandValid: true,
-					Command:      rf.log[i].Command,
+					Command:      rf.log[i-rf.snapshotLastIndex].Command,
 					CommandIndex: i,
 				}
 				rf.applyCh <- applymessage
