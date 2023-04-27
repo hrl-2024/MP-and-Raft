@@ -69,6 +69,7 @@ type ApplyMsg struct {
 type logEntryWithTerm struct {
 	Command interface{}
 	Term    int
+	Index   int
 }
 
 // A Go object implementing a single Raft peer.
@@ -160,6 +161,62 @@ func (rf *Raft) readPersist(data []byte) {
 		rf.persist()
 		rf.timeLastOperation = time.Now()
 	}
+}
+
+// For 2D
+type InstallSnapshotArgs struct {
+	Term              int    // leader's term
+	LeaderId          int    // so follower can redirect clients
+	LastIncludedIndex int    // the snapshot replaces all entries up through and including this index
+	LastIncludedTerm  int    // Term of lastIncludedIndex
+	Offset            int    // byte offset where chunk is positioned in the snapshot file
+	Data              []byte // raw bytes of the snapshot chunk, starting at offset
+	Done              bool   // true if this is the last chunk
+}
+
+type InstallSnapshotReply struct {
+	Term     int // currentTerm, for leader to update itself
+	LeaderId int // the currentTerm's LeaderIs
+}
+
+func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapshotReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	if args.Term < rf.currentTerm {
+		reply.Term = rf.currentTerm
+		return
+	}
+
+}
+
+func (rf *Raft) sendInstallSnapshot(server int, args *InstallSnapshotArgs, reply *InstallSnapshotReply) bool {
+	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
+
+	if !ok {
+		fmt.Printf("sendInstallSnapshot: Server %d Call(\"Raft%d.InstallSnapshot\") failed.\n", args.LeaderId, server)
+		return ok
+	}
+
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	if reply.Term > rf.currentTerm {
+		fmt.Printf("sendInstallSnapshot: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
+		rf.currentTerm = reply.Term
+		if reply.LeaderId != -1 {
+			rf.votedFor = reply.LeaderId
+		} else {
+			rf.votedFor = server
+		}
+		// resets its election timeout
+		rand.Seed(time.Now().UnixNano())
+		rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
+		rf.timeLastOperation = time.Now()
+		rf.persist()
+	}
+
+	return ok
 }
 
 // A service wants to switch to snapshot.  Only do so if Raft hasn't
@@ -577,6 +634,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	newLog := logEntryWithTerm{
 		Command: command,
 		Term:    term,
+		Index:   rf.log[len(rf.log)-1].Index + 1,
 	}
 	rf.log = append(rf.log, newLog)
 	rf.persist()
@@ -846,7 +904,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// Persisitent state
 	rf.currentTerm = 0
 	rf.votedFor = -1
-	rf.log = []logEntryWithTerm{{nil, 0}}
+	rf.log = []logEntryWithTerm{{nil, 0, 0}}
 
 	// Volatile state on all servers
 	rf.commitIndex = 0
