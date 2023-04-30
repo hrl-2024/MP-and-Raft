@@ -526,12 +526,12 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	// fmt.Printf("AppendEntries from %d: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
 
-	if rf.myElectionStarted {
-		// gotta wait
-		reply.Success = false
-		fmt.Printf("    AppendEntries from %d: server %d in election. Gotta wait. \n", args.LeaderId, rf.me)
-		return
-	}
+	// if rf.myElectionStarted {
+	// 	// gotta wait
+	// 	reply.Success = false
+	// 	fmt.Printf("    AppendEntries from %d: server %d in election. Gotta wait. \n", args.LeaderId, rf.me)
+	// 	return
+	// }
 
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
