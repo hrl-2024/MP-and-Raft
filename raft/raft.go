@@ -109,10 +109,6 @@ type Raft struct {
 	// for apply channel (to reply)
 	applyCh chan ApplyMsg
 
-	// For snapshot
-	snapshotLastIndex int // the last included snapshotted log's index
-	snapshotLastTerm  int // the last included snapshotted log's Term
-
 	applyChBuffer chan ApplyMsg
 }
 
