@@ -39,7 +39,7 @@ var (
 )
 
 // timeout low bound and range
-var timeoutLowBound = 80
+var timeoutLowBound = 90
 var timeoutRange = 80
 
 // import "bytes"
@@ -129,7 +129,7 @@ func (rf *Raft) GetState() (int, bool) {
 func (rf *Raft) persist() {
 	// Your code here (2C).
 	rf.persister.SaveRaftState(rf.encodeState())
-	// fmt.Printf("                                                                    persist: saving state for server %d\n", rf.me)
+	// DPrintf("                                                                    persist: saving state for server %d\n", rf.me)
 }
 
 func (rf *Raft) encodeState() []byte {
@@ -156,12 +156,12 @@ func (rf *Raft) readPersist(data []byte) {
 	if d.Decode(&currentTerm) != nil || d.Decode(&votedFor) != nil || d.Decode(&log) != nil {
 		logger.Fatal("                                                                    readPersist: decode error")
 	} else {
-		fmt.Printf("                                                                    readPersist:---------restoring server %d stats\n", rf.me)
-		fmt.Printf("                                                                                         currentTerm = %d votedFor = %d log = %v\n", currentTerm, votedFor, log)
+		DPrintf("                                                                    readPersist:---------restoring server %d stats\n", rf.me)
+		DPrintf("                                                                                         currentTerm = %d votedFor = %d log = %v\n", currentTerm, votedFor, log)
 		rf.currentTerm = currentTerm
 		rf.votedFor = votedFor
 		rf.log = log
-		fmt.Printf("                                                                                         rf: currentTerm = %d votedFor = %d log = %v\n", rf.currentTerm, rf.votedFor, rf.log)
+		DPrintf("                                                                                         rf: currentTerm = %d votedFor = %d log = %v\n", rf.currentTerm, rf.votedFor, rf.log)
 		rf.persist()
 		rf.timeLastOperation = time.Now()
 	}
@@ -191,14 +191,14 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	reply.Term = rf.currentTerm
 
 	if args.Term < rf.currentTerm {
-		fmt.Printf("InstallSnapshot: args.Term (%d) < mine(%d) \n", args.Term, rf.currentTerm)
+		DPrintf("InstallSnapshot: args.Term (%d) < mine(%d) \n", args.Term, rf.currentTerm)
 		reply.LeaderId = rf.votedFor
 		return
 	}
 
 	if args.Term > rf.currentTerm {
 		// convert back to follower
-		fmt.Printf("InstallSnapshot: %d convert back to follower by server %d \n", rf.me, args.LeaderId)
+		DPrintf("InstallSnapshot: %d convert back to follower by server %d \n", rf.me, args.LeaderId)
 		rf.currentTerm = args.Term
 		rf.votedFor = args.LeaderId
 		rf.timeLastOperation = time.Now()
@@ -207,7 +207,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 
 	// already snapshotted
 	// if args.LastIncludedIndex < rf.log[0].Index {
-	// 	fmt.Printf("InstallSnapshot: server %d already snapshotted log %d. rf.log[0].Index = %d \n", rf.me, args.LastIncludedIndex, rf.log[0].Index)
+	// 	DPrintf("InstallSnapshot: server %d already snapshotted log %d. rf.log[0].Index = %d \n", rf.me, args.LastIncludedIndex, rf.log[0].Index)
 	// 	reply.Success = true
 	// 	rf.timeLastOperation = time.Now()
 	// 	return
@@ -233,7 +233,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	state_data := rf.encodeState()
 	rf.persister.SaveStateAndSnapshot(state_data, args.Data)
 
-	fmt.Printf("InstallSnapshot: server %d's log[0] = %v\n", rf.me, rf.log[0])
+	DPrintf("InstallSnapshot: server %d's log[0] = %v\n", rf.me, rf.log[0])
 	// }
 }
 
@@ -241,7 +241,7 @@ func (rf *Raft) sendInstallSnapshot(server int, args *InstallSnapshotArgs, reply
 	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
 
 	if !ok {
-		fmt.Printf("sendInstallSnapshot: Server %d Call(\"Raft%d.InstallSnapshot\") failed.\n", args.LeaderId, server)
+		DPrintf("sendInstallSnapshot: Server %d Call(\"Raft%d.InstallSnapshot\") failed.\n", args.LeaderId, server)
 		return ok
 	}
 
@@ -249,7 +249,7 @@ func (rf *Raft) sendInstallSnapshot(server int, args *InstallSnapshotArgs, reply
 	defer rf.mu.Unlock()
 
 	if reply.Term > rf.currentTerm {
-		fmt.Printf("sendInstallSnapshot: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
+		DPrintf("sendInstallSnapshot: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
 		rf.currentTerm = reply.Term
 		if reply.LeaderId != -1 {
 			rf.votedFor = reply.LeaderId
@@ -264,7 +264,7 @@ func (rf *Raft) sendInstallSnapshot(server int, args *InstallSnapshotArgs, reply
 	} else if reply.Success {
 		rf.nextIndex[server] = args.LastIncludedIndex + 1
 		rf.matchIndex[server] = args.LastIncludedIndex
-		fmt.Printf("sendInstallSnapshot: leader %d's nextIndex[%d] = %d. matchIndex[%d] = %d\n", rf.me, server, rf.nextIndex[server], server, rf.matchIndex[server])
+		DPrintf("sendInstallSnapshot: leader %d's nextIndex[%d] = %d. matchIndex[%d] = %d\n", rf.me, server, rf.nextIndex[server], server, rf.matchIndex[server])
 	}
 
 	return ok
@@ -289,18 +289,18 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	if index <= rf.log[0].Index {
-		fmt.Printf(`Snapshot: Server %d(%d) rejects snapshotting %d. 
+		DPrintf(`Snapshot: Server %d(%d) rejects snapshotting %d. 
 						Reason: %d <= %d (snapShotLastIndex)`, rf.me, rf.currentTerm, index,
 			index, rf.log[0].Index)
 		return
 	} else if index > rf.commitIndex {
-		fmt.Printf(`Snapshot: Server %d(%d) rejects snapshotting %d. 
+		DPrintf(`Snapshot: Server %d(%d) rejects snapshotting %d. 
 						Reason: %d > %d (commitIndex)`, rf.me, rf.currentTerm, index,
 			index, rf.commitIndex)
 		return
 	}
 
-	fmt.Printf("Snapshot: Server %d(%d) is snapshotting %d.\n", rf.me, rf.currentTerm, index)
+	DPrintf("Snapshot: Server %d(%d) is snapshotting %d.\n", rf.me, rf.currentTerm, index)
 
 	// Trim log until index
 	rf.trimLogUntilIndex(index)
@@ -318,7 +318,7 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	state_data := rf.encodeState()
 	rf.persister.SaveStateAndSnapshot(state_data, snapshot)
 
-	fmt.Printf("          Server %d(%d)'s first log now = %v. snaplastIndex = %d. LastTerm = %d.\n", rf.me, rf.currentTerm, rf.log[0], rf.log[0].Index, rf.log[0].Term)
+	DPrintf("          Server %d(%d)'s first log now = %v. snaplastIndex = %d. LastTerm = %d.\n", rf.me, rf.currentTerm, rf.log[0], rf.log[0].Index, rf.log[0].Term)
 }
 
 func (rf *Raft) trimLogUntilIndex(index int) {
@@ -352,19 +352,19 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	// fmt.Printf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
+	// DPrintf("RequestVote: server %d(%d) received RequestVoteRPC from server %d(%d).\n", rf.me, rf.currentTerm, args.CandidateId, args.Term)
 
 	if args.Term <= rf.currentTerm {
 		reply.VoteGranted = false
 		reply.Term = rf.currentTerm
 		reply.LeaderId = rf.votedFor
-		fmt.Printf("RequestVote: server %d rejected server %d. Reason: candidate's term <= mine.\n", rf.me, args.CandidateId)
+		DPrintf("RequestVote: server %d rejected server %d. Reason: candidate's term <= mine.\n", rf.me, args.CandidateId)
 		return
 	}
 
 	if args.Term > rf.currentTerm && rf.votedFor == rf.me {
 		// convert back to follower
-		fmt.Printf("RequestVote: server %d step down by server %d.\n", rf.me, args.CandidateId)
+		DPrintf("RequestVote: server %d step down by server %d.\n", rf.me, args.CandidateId)
 		reply.VoteGranted = false
 		rf.currentTerm = args.Term
 		rf.votedFor = args.CandidateId
@@ -391,7 +391,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 				rand.Seed(time.Now().UnixNano())
 				rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-				fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: Prev log term is bigger.\n", rf.me, args.CandidateId)
+				DPrintf("RequestVote: server %d grant vote to server %d. Reason: Prev log term is bigger.\n", rf.me, args.CandidateId)
 
 				rf.persist()
 
@@ -409,7 +409,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 					rand.Seed(time.Now().UnixNano())
 					rf.heartbeatTimeout = rand.Intn(timeoutLowBound) + timeoutRange
 
-					fmt.Printf("RequestVote: server %d grant vote to server %d. Reason: same term, log index is at least uptodate \n", rf.me, args.CandidateId)
+					DPrintf("RequestVote: server %d grant vote to server %d. Reason: same term, log index is at least uptodate \n", rf.me, args.CandidateId)
 
 					rf.persist()
 					return
@@ -417,14 +417,14 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 					reply.VoteGranted = false
 					reply.Term = rf.currentTerm
 					reply.LeaderId = rf.votedFor
-					fmt.Printf("RequestVote: server %d rejected server %d. Reason: same term, but index shorter\n", rf.me, args.CandidateId)
+					DPrintf("RequestVote: server %d rejected server %d. Reason: same term, but index shorter\n", rf.me, args.CandidateId)
 					return
 				}
 			} else {
 				reply.VoteGranted = false
 				reply.Term = rf.currentTerm
 				reply.LeaderId = rf.votedFor
-				fmt.Printf("RequestVote: server %d rejected server %d. Reason: Log's term less. \n", rf.me, args.CandidateId)
+				DPrintf("RequestVote: server %d rejected server %d. Reason: Log's term less. \n", rf.me, args.CandidateId)
 				return
 			}
 		}
@@ -470,21 +470,21 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
 
 	if !ok {
-		fmt.Printf("sendRequestVote: Server %d Call(\"Raft%d.RequestVote\") failed.\n", args.CandidateId, server)
+		DPrintf("sendRequestVote: Server %d Call(\"Raft%d.RequestVote\") failed.\n", args.CandidateId, server)
 		return ok
 	}
 
 	if reply.VoteGranted {
 		rf.mu.Lock()
 		if args.Term == rf.currentTerm && rf.myElectionStarted {
-			fmt.Printf("sendRequestVote: Server %d received vote for term %d from %d\n", args.CandidateId, args.Term, server)
+			DPrintf("sendRequestVote: Server %d received vote for term %d from %d\n", args.CandidateId, args.Term, server)
 			rf.voteReceived += 1
 		}
 		rf.mu.Unlock()
 	} else {
 		rf.mu.Lock()
 		if reply.Term > rf.currentTerm {
-			fmt.Printf("sendRequestVote: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
+			DPrintf("sendRequestVote: server %d convert back to follower. Now, term = %d. Leader = %d\n", rf.me, reply.Term, reply.LeaderId)
 			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
 			// resets its election timeout
@@ -493,7 +493,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 			rf.timeLastOperation = time.Now()
 			rf.persist()
 		}
-		fmt.Printf("sendRequestVote: server %d (term = %d, Leader = %d) rejected server %d.\n", server, reply.Term, reply.LeaderId, args.CandidateId)
+		DPrintf("sendRequestVote: server %d (term = %d, Leader = %d) rejected server %d.\n", server, reply.Term, reply.LeaderId, args.CandidateId)
 		if reply.Term >= rf.currentTerm && reply.LeaderId == -1 {
 			rf.currentTerm = reply.Term
 			rf.votedFor = server
@@ -529,18 +529,18 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	// fmt.Printf("AppendEntries from %d: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
+	// DPrintf("AppendEntries from %d: server %d received AppendEntriesRPC from server %d.\n", rf.me, args.LeaderId)
 
 	// if rf.myElectionStarted {
 	// 	// gotta wait
 	// 	reply.Success = false
-	// 	fmt.Printf("    AppendEntries from %d: server %d in election. Gotta wait. \n", args.LeaderId, rf.me)
+	// 	DPrintf("    AppendEntries from %d: server %d in election. Gotta wait. \n", args.LeaderId, rf.me)
 	// 	return
 	// }
 
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
-		fmt.Printf("    AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
+		DPrintf("    AppendEntries from %d: server %d convert back to follower. Term = %d \n", args.LeaderId, rf.me, args.Term)
 		rf.timeLastOperation = time.Now()
 		rf.votedFor = args.LeaderId
 		rf.persist()
@@ -552,13 +552,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	if args.Term < rf.currentTerm {
 		reply.Success = false
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason: args.Term < currentTerm.\n", args.LeaderId, rf.me, args.LeaderId)
+		DPrintf("    AppendEntries from %d: server %d denied server %d. Reason: args.Term < currentTerm.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
 	if args.LeaderId != rf.votedFor {
 		reply.Success = false
-		fmt.Printf("AppendEntries from %d: server %d denied server %d. Not my leader.\n", args.LeaderId, rf.me, args.LeaderId)
+		DPrintf("AppendEntries from %d: server %d denied server %d. Not my leader.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
@@ -568,7 +568,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.PrevLogIndex < rf.log[0].Index {
 		reply.Success = false
 
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason: PrevLogIndex smaller than snapshotted index.\n", args.LeaderId, rf.me, args.LeaderId)
+		DPrintf("    AppendEntries from %d: server %d denied server %d. Reason: PrevLogIndex smaller than snapshotted index.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
@@ -578,12 +578,12 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 		// reply.FirstIndexForArgTerm = rf.log[len(rf.log)-1].Index
 
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason: no log at PrevlogIndex.\n", args.LeaderId, rf.me, args.LeaderId)
+		DPrintf("    AppendEntries from %d: server %d denied server %d. Reason: no log at PrevlogIndex.\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
 	// 2.1 ... whose term matches prevLogTerm
-	fmt.Printf("    AppendEntries %d->%d: args.PrevLogIndex=%d. rf.log[0].Index = %d\n", args.LeaderId, rf.me, args.PrevLogIndex, rf.log[0].Index)
+	DPrintf("    AppendEntries %d->%d: args.PrevLogIndex=%d. rf.log[0].Index = %d\n", args.LeaderId, rf.me, args.PrevLogIndex, rf.log[0].Index)
 	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex-rf.log[0].Index].Term != args.PrevLogTerm {
 		reply.Success = false
 
@@ -595,19 +595,19 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		}
 		reply.FirstIndexForArgTerm = i + 1 + rf.log[0].Index
 
-		fmt.Printf("    AppendEntries from %d: server %d denied server %d. Reason: Term mismatch at log[PrevlogIndex].\n", args.LeaderId, rf.me, args.LeaderId)
+		DPrintf("    AppendEntries from %d: server %d denied server %d. Reason: Term mismatch at log[PrevlogIndex].\n", args.LeaderId, rf.me, args.LeaderId)
 		return
 	}
 
 	// 3. If an existing entry conflicts with a new one (same index but different terms),
 	// delete the existing entry and all that follow it.
 	if 0 <= args.PrevLogIndex && rf.log[args.PrevLogIndex-rf.log[0].Index].Term == args.PrevLogTerm {
-		fmt.Printf("    AppendEntries from %d: server %d deleting log after log[%d] \n", args.LeaderId, rf.me, args.PrevLogIndex)
+		DPrintf("    AppendEntries from %d: server %d deleting log after log[%d] \n", args.LeaderId, rf.me, args.PrevLogIndex)
 		rf.log = rf.log[:args.PrevLogIndex-rf.log[0].Index+1]
 	}
 
 	rf.log = append(rf.log, args.Entries...)
-	fmt.Printf("    AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
+	DPrintf("    AppendEntries from %d: server %d has appended log. \n               %v \n", args.LeaderId, rf.me, rf.log)
 	rf.persist()
 
 	reply.Success = true
@@ -615,13 +615,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.LeaderCommit > rf.commitIndex {
 		N := min(args.LeaderCommit, args.PrevLogIndex+len(args.Entries))
 
-		fmt.Printf("        rf.commitIndex now = %d. LeaderCommit = %d. Last new index = %d. Last log's index = %d \n", N, args.LeaderCommit, args.PrevLogIndex+len(args.Entries), rf.log[len(rf.log)-1].Index)
+		DPrintf("        rf.commitIndex now = %d. LeaderCommit = %d. Last new index = %d. Last log's index = %d \n", N, args.LeaderCommit, args.PrevLogIndex+len(args.Entries), rf.log[len(rf.log)-1].Index)
 
 		for i := rf.commitIndex + 1; i <= N; i++ {
 			if i < rf.log[0].Index {
 				continue
 			}
-			fmt.Printf("Commit: server %d committing log %d\n", rf.me, i)
+			DPrintf("Commit: server %d committing log %d\n", rf.me, i)
 			rf.commitIndex = i
 			applymessage := ApplyMsg{
 				CommandValid: true,
@@ -629,15 +629,15 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 				CommandIndex: i,
 			}
 			rf.applyChBuffer <- applymessage
-			fmt.Printf("                ApplyMsg = %v\n", applymessage)
-			// fmt.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
+			DPrintf("                ApplyMsg = %v\n", applymessage)
+			// DPrintf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
 		}
 	}
 
 	if len(args.Entries) == 0 {
 		// heartbeat messages
 		reply.Success = true
-		fmt.Printf("    AppendEntries from %d: server %d's current log: %v \n", args.LeaderId, rf.me, rf.log)
+		DPrintf("    AppendEntries from %d: server %d's current log: %v \n", args.LeaderId, rf.me, rf.log)
 		return
 	}
 }
@@ -662,17 +662,17 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
 
 	if !ok {
-		fmt.Printf("sendAppendEntries: Server %d Call(\"Raft%d.AppendEntries\") failed.\n", args.LeaderId, server)
+		DPrintf("sendAppendEntries: Server %d Call(\"Raft%d.AppendEntries\") failed.\n", args.LeaderId, server)
 		return ok
 	}
 
 	if reply.Success {
-		// fmt.Printf("sendAppendEntries from %d: server %d's request to server %d succeed.\n", args.LeaderId, server)
+		// DPrintf("sendAppendEntries from %d: server %d's request to server %d succeed.\n", args.LeaderId, server)
 		rf.mu.Lock()
 		rf.nextIndex[server] = args.PrevLogIndex + len(args.Entries) + 1
 		rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
 
-		fmt.Printf("sendAppendEntries: %d(%d): matchIndex for server %d is now %d. args.PrevLogIndex = %d\n", rf.me, rf.currentTerm, server, rf.matchIndex[server], args.PrevLogIndex)
+		DPrintf("sendAppendEntries: %d(%d): matchIndex for server %d is now %d. args.PrevLogIndex = %d\n", rf.me, rf.currentTerm, server, rf.matchIndex[server], args.PrevLogIndex)
 
 		rf.commit_checker()
 		rf.mu.Unlock()
@@ -684,7 +684,7 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 
 		rf.mu.Lock()
 		if reply.Term > rf.currentTerm && reply.LeaderId != -1 {
-			fmt.Printf("sendAppendEntries: candidate %d's term is higher than mine (%d).\n", server, args.LeaderId)
+			DPrintf("sendAppendEntries: candidate %d's term is higher than mine (%d).\n", server, args.LeaderId)
 			rf.currentTerm = reply.Term
 			rf.votedFor = reply.LeaderId
 			rf.timeLastOperation = time.Now()
@@ -694,7 +694,7 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 		}
 
 		if rf.nextIndex[server] > 1 && reply.FirstIndexForArgTerm != 0 {
-			// fmt.Printf("sendAppendEntries: nextIndex for server %d decreased from %d to %d\n", server, rf.nextIndex[server], reply.FirstIndexForArgTerm)
+			// DPrintf("sendAppendEntries: nextIndex for server %d decreased from %d to %d\n", server, rf.nextIndex[server], reply.FirstIndexForArgTerm)
 			rf.nextIndex[server] = reply.FirstIndexForArgTerm
 		} else if rf.nextIndex[server] > 1 {
 			rf.nextIndex[server] = 1
@@ -787,7 +787,7 @@ func (rf *Raft) ticker() {
 			logLn1 := fmt.Sprintf("Ticker: server %d is leader for term %d. Sending AppendEntryRPC. --------------------\n", rf.me, rf.currentTerm)
 			logLn2 := fmt.Sprintf("        leader server %d log: %v \n", rf.me, rf.log)
 			logLn3 := fmt.Sprintf("        leader server %d nextIndex: %v \n", rf.me, rf.nextIndex)
-			fmt.Printf(logLn1 + logLn2 + logLn3)
+			DPrintf(logLn1 + logLn2 + logLn3)
 
 			// args_temp := AppendEntriesArgs{
 			// 	Term:         rf.currentTerm,
@@ -835,7 +835,7 @@ func (rf *Raft) ticker() {
 
 						// send the appropriate log
 						logIndexToSent := nextIndexCopy[peer_index] - logCopy[0].Index
-						// fmt.Printf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
+						// DPrintf("        logIndexToSent_%d = %d len(logCopy) = %v \n", peer_index, logIndexToSent, len(logCopy))
 						if len(logCopy) > 1 && logIndexToSent < len(logCopy) {
 							args.Entries = logCopy[logIndexToSent:]
 						}
@@ -857,7 +857,7 @@ func (rf *Raft) ticker() {
 						SnapshotReply := InstallSnapshotReply{}
 						go rf.sendInstallSnapshot(peer_index, &SnapshotArgs, &SnapshotReply)
 
-						fmt.Printf("sendInstallSnapshot: server %d --> %d. LastIncludedIndex = %d. LastIncludedTerm = %d \n", rf.me, peer_index, SnapshotArgs.LastIncludedIndex, SnapshotArgs.LastIncludedTerm)
+						DPrintf("sendInstallSnapshot: server %d --> %d. LastIncludedIndex = %d. LastIncludedTerm = %d \n", rf.me, peer_index, SnapshotArgs.LastIncludedIndex, SnapshotArgs.LastIncludedTerm)
 
 						rf.mu.Unlock()
 					}
@@ -873,7 +873,7 @@ func (rf *Raft) ticker() {
 			// check if time out
 			deadline := rf.timeLastOperation.Add(time.Millisecond * time.Duration(rf.heartbeatTimeout))
 			if time.Now().After(deadline) && !rf.myElectionStarted {
-				fmt.Printf("Server %d timed out.\n", rf.me)
+				DPrintf("Server %d timed out.\n", rf.me)
 				// if timeout, become candiate
 				rf.votedFor = -1
 				rf.persist()
@@ -895,7 +895,7 @@ func (rf *Raft) startElection(term int) bool {
 		rf.mu.Unlock()
 		return false
 	}
-	fmt.Printf("Server %d started election for term %d.\n", rf.me, term)
+	DPrintf("Server %d started election for term %d.\n", rf.me, term)
 	rf.timeLastOperation = time.Now()
 
 	rf.currentTerm += 1
@@ -929,15 +929,15 @@ func (rf *Raft) startElection(term int) bool {
 	for time.Now().Before(deadline) {
 		rf.mu.Lock()
 		if (rf.currentTerm > term && rf.votedFor != -1) || !rf.myElectionStarted {
-			fmt.Printf("      server %d election for term %d failed. currentTerm = %d. votedFor = %d\n", rf.me, args.Term, rf.currentTerm, rf.votedFor)
+			DPrintf("      server %d election for term %d failed. currentTerm = %d. votedFor = %d\n", rf.me, args.Term, rf.currentTerm, rf.votedFor)
 			rf.myElectionStarted = false
 			rf.mu.Unlock()
 			return false
 		}
 		if rf.currentTerm == args.Term && rf.voteReceived > (len(rf.peers)/2) {
 			// if we are still on the same term and got enough votes, become the leader
-			fmt.Printf("server %d is now the leader for term %d.\n", rf.me, rf.currentTerm)
-			fmt.Printf("          server %d has log: %v \n", rf.me, rf.log)
+			DPrintf("server %d is now the leader for term %d.\n", rf.me, rf.currentTerm)
+			DPrintf("          server %d has log: %v \n", rf.me, rf.log)
 			rf.votedFor = rf.me
 
 			lastLogIndex := rf.log[len(rf.log)-1].Index + 1
@@ -960,7 +960,7 @@ func (rf *Raft) startElection(term int) bool {
 	}
 
 	rf.mu.Lock()
-	fmt.Printf("server %d election timeout for term %d.\n", rf.me, term)
+	DPrintf("server %d election timeout for term %d.\n", rf.me, term)
 	rf.myElectionStarted = false
 	rf.mu.Unlock()
 
@@ -970,8 +970,8 @@ func (rf *Raft) startElection(term int) bool {
 func (rf *Raft) commit_checker() {
 	overHalf := len(rf.peers) / 2
 
-	fmt.Printf("commit_checker: %d commitIndex = %d \n", rf.me, rf.commitIndex)
-	fmt.Printf("                %d matchIndex = %v\n", rf.me, rf.matchIndex)
+	DPrintf("commit_checker: %d commitIndex = %d \n", rf.me, rf.commitIndex)
+	DPrintf("                %d matchIndex = %v\n", rf.me, rf.matchIndex)
 
 	// If there exists an N such that N > commitIndex,
 	// a majority of matchIndex[i] >= N,
@@ -984,19 +984,19 @@ func (rf *Raft) commit_checker() {
 				counter++
 			}
 			if counter > overHalf {
-				// fmt.Printf("                %d\n", index)
+				// DPrintf("                %d\n", index)
 				break
 			}
 		}
 
 		if counter > overHalf && rf.log[N-rf.log[0].Index].Term == rf.currentTerm {
-			fmt.Printf("                %d commit_checker: N = %d\n", rf.me, N)
+			DPrintf("                %d commit_checker: N = %d\n", rf.me, N)
 
 			for i := rf.commitIndex + 1; i <= N; i++ {
 				if i < rf.log[0].Index {
 					continue
 				}
-				fmt.Printf("Commit_checker: server %d committing log %d\n", rf.me, i)
+				DPrintf("Commit_checker: server %d committing log %d\n", rf.me, i)
 				rf.commitIndex = i
 				applymessage := ApplyMsg{
 					CommandValid: true,
@@ -1004,8 +1004,8 @@ func (rf *Raft) commit_checker() {
 					CommandIndex: i,
 				}
 				rf.applyChBuffer <- applymessage
-				fmt.Printf("                ApplyMsg = %v\n", applymessage)
-				// fmt.Printf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
+				DPrintf("                ApplyMsg = %v\n", applymessage)
+				// DPrintf("                ApplyMsg's Command = %v\n", rf.log[N].Command)
 			}
 
 			break
