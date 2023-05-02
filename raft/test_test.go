@@ -104,22 +104,16 @@ func TestManyElections2A(t *testing.T) {
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
 		cfg.disconnect(i1)
-		fmt.Printf("Test: %d disconnected\n", i1)
 		cfg.disconnect(i2)
-		fmt.Printf("Test: %d disconnected\n", i2)
 		cfg.disconnect(i3)
-		fmt.Printf("Test: %d disconnected\n", i3)
 
 		// either the current leader should still be alive,
 		// or the remaining four should elect a new one.
 		cfg.checkOneLeader()
 
 		cfg.connect(i1)
-		fmt.Printf("Test: %d reconnected\n", i1)
 		cfg.connect(i2)
-		fmt.Printf("Test: %d reconnected\n", i2)
 		cfg.connect(i3)
-		fmt.Printf("Test: %d reconnected\n", i3)
 	}
 
 	cfg.checkOneLeader()
@@ -165,7 +159,7 @@ func TestRPCBytes2B(t *testing.T) {
 	iters := 10
 	var sent int64 = 0
 	for index := 2; index < iters+2; index++ {
-		cmd := randstring(5000) // changed this
+		cmd := randstring(5000)
 		xindex := cfg.one(cmd, servers, false)
 		if xindex != index {
 			t.Fatalf("got index %v but expected %v", xindex, index)
@@ -839,7 +833,6 @@ func TestFigure8Unreliable2C(t *testing.T) {
 
 		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
 			cfg.disconnect(leader)
-			fmt.Printf("Test: Server %d disconnected.\n", leader)
 			nup -= 1
 		}
 
@@ -847,7 +840,6 @@ func TestFigure8Unreliable2C(t *testing.T) {
 			s := rand.Int() % servers
 			if cfg.connected[s] == false {
 				cfg.connect(s)
-				fmt.Printf("Test: Server %d reconnected.\n", s)
 				nup += 1
 			}
 		}
@@ -856,7 +848,6 @@ func TestFigure8Unreliable2C(t *testing.T) {
 	for i := 0; i < servers; i++ {
 		if cfg.connected[i] == false {
 			cfg.connect(i)
-			fmt.Printf("Test: Server %d reconnected.\n", i)
 		}
 	}
 
