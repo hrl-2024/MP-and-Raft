@@ -39,8 +39,8 @@ var (
 )
 
 // timeout low bound and range
-var timeoutLowBound = 150
-var timeoutRange = 150
+var timeoutLowBound = 80
+var timeoutRange = 80
 
 // import "bytes"
 // import "cs350/labgob"
@@ -304,6 +304,15 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 
 	// Trim log until index
 	rf.trimLogUntilIndex(index)
+
+	rf.applyChBuffer <- ApplyMsg{
+		SnapshotValid: true,
+		Snapshot:      snapshot,
+		SnapshotTerm:  rf.log[0].Term,
+		SnapshotIndex: rf.log[0].Index,
+	}
+
+	rf.commitIndex = rf.log[0].Index
 
 	// Save state and snapshot
 	state_data := rf.encodeState()
